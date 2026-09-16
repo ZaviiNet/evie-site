@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gremlin Run</title>
+<style>
+  :root{ --bg:#14110e; --ink:#e8d9c0; --amber:#c8862e; }
+  html,body{ height:100%; margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Courier New',monospace; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:.6rem; user-select:none; }
+  h1{ font-size:1rem; letter-spacing:2px; color:var(--amber); margin:.2rem; font-weight:normal; }
+  canvas{ background:#0d0b09; border:1px solid #3a2c1c; border-radius:6px;
+    box-shadow:0 4px 18px rgba(0,0,0,.5); image-rendering:pixelated; }
+  #hint{ font-size:.72rem; color:#8a7658; }
+</style>
+</head>
+<body>
+<h1>GREMLIN RUN</h1>
+<canvas id="game" width="640" height="240"></canvas>
+<div id="hint">phase 1 — canvas + loop + player. SPACE/↑ to hop (stub).</div>
+<script>
+(() => {
+  'use strict';
+  const cv = document.getElementById('game');
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+
+  // --- world constants (phase 1: ground + a placeholder gremlin) ---
+  const GROUND_Y = H - 40;          // top of the ground band
+  const GRAVITY = 0.9;
+
+  // player: a little gremlin — position/velocity are the whole state for now
+  const player = {
+    x: 80, y: GROUND_Y, w: 26, h: 30,
+    vy: 0, onGround: true,
+  };
+
+  // phase 2: obstacles (spiky tumbleweeds) + simple run state
+  const SPAWN_EVERY = 1500;         // ms between spawns
+  let spawnTimer = 600;             // first one comes early-ish
+  let speed = 3.2;                  // scroll speed, px/step
+  let obstacles = [];               // {x, w, h}
+  let state = 'run';                // 'run' | 'dead'
+  // phase 4: score + best (persisted) + run ids
+  let score = 0;                    // distance-ish score, ticks while running
+  let best = 0;
+  try { best = parseInt(localStorage.getItem('gremlinRunBest') || '0', 10) || 0; } catch (e) { best = 0; }
+  let newBest = false;
+
+  // phase 3: juice — particles (dust on jump/land, splat burst on hit)
+  let particles = [];               // {x,y,vx,vy,life,maxLife,c}
+  function emit(x, y, n, opts) {
+    opts = opts || {};
+    for (let k = 0; k < n; k++) {
+      const ang = (opts.ang ?? Math.PI * 1.5) + (Math.random() - 0.5) * (opts.spread ?? Math.PI);
+      const sp = (opts.sp ?? 2) * (0.5 + Math.random());
+      particles.push({
+        x, y,
+        vx: Math.cos(ang) * sp + (opts.vx ?? 0),
+        vy: Math.sin(ang) * sp + (opts.vy ?? 0),
+        life: 0, maxLife: (opts.life ?? 34) * (0.6 + Math.random() * 0.8),
+        c: opts.c ?? '#8a6a3a',
+      });
+    }
+  }
+
+  // phase 3: WebAudio sfx — tiny synth blips, lazy-created on first gesture (autoplay-safe)
+  let actx = null;
+  function audio() {
+    if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { actx = null; } }
+    return actx;
+  }
+  function blip(freq, dur, type, gain) {
+    const a = audio(); if (!a) return;
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = type || 'square'; o.frequency.value = freq;
+    g.gain.value = gain == null ? 0.05 : gain;
+    o.connect(g); g.connect(a.destination);
+    const t = a.currentTime;
+    g.gain.setValueAtTime(g.gain.value, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + (dur || 0.09));
+    o.start(t); o.stop(t + (dur || 0.09));
+  }
+  const sfx = {
+    jump: () => blip(340, 0.10, 'square', 0.045),
+    hit:  () => { blip(120, 0.26, 'sawtooth', 0.08); setTimeout(() => blip(80, 0.24, 'sawtooth', 0.06), 40); },
+  };
+
+  function spawnObstacle() {
+    const h = 18 + Math.floor(Math.random() * 20);   // 18-37 px tall
+    obstacles.push({ x: W + 4, w: 16 + Math.floor(Math.random() * 12), h });
+  }
+
+  // AABB: player box vs obstacle box. Player box uses its sprite bounds.
+  function hits(o) {
+    const px = player.x, py = player.y - player.h, pw = player.w, ph = player.h;
+    const ox = o.x, oy = GROUND_Y - o.h, ow = o.w, oh = o.h;
+    return px < ox + ow && px + pw > ox && py < oy + oh && py + ph > oy;
+  }
+
+  // input (phase 1 stub: hop only)
+  const keys = Object.create(null);
+  addEventListener('keydown', e => {
+    keys[e.code] = true;
+    if ((e.code === 'Space' || e.code === 'ArrowUp') && player.onGround && state === 'run') {
+      player.vy = -14;
+      player.onGround = false;
+      sfx.jump();
+      emit(player.x + 13, GROUND_Y, 6, { ang: Math.PI * 0.5, spread: Math.PI * 0.7, sp: 1.4, life: 22, c: '#5a4426' });
+    }
+    if ((e.code === 'KeyR') && state === 'dead') {
+      // phase-4 restart — full reset incl. score
+      obstacles = []; particles = []; spawnTimer = 600; state = 'run'; speed = 3.2;
+      score = 0; newBest = false;
+      player.y = GROUND_Y; player.vy = 0; player.onGround = true;
+    }
+    if ((e.code === 'KeyS') && state === 'dead') {
+      // phase-4 share: copy a brag line
+      const txt = `I scored ${Math.floor(score)} in Gremlin Run. Beat me.`;
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).catch(() => {});
+    }
+    if (e.code === 'Space') e.preventDefault();
+  });
+  addEventListener('keyup', e => { keys[e.code] = false; });
+
+  // fixed-step-ish loop with rAF + delta clamp
+  let last = performance.now();
+  let acc = 0;
+  const STEP = 1000 / 60;
+
+  function update(dt) {
+    // vertical physics
+    player.vy += GRAVITY;
+    player.y += player.vy;
+    if (player.y >= GROUND_Y) {
+      if (!player.onGround) emit(player.x + 13, GROUND_Y, 5, { ang: Math.PI * 0.5, spread: Math.PI * 0.6, sp: 1.2, life: 18, c: '#5a4426' });
+      player.y = GROUND_Y; player.vy = 0; player.onGround = true;
+    }
+
+    if (state !== 'run') {
+      stepParticles(dt);
+      return;      // dead: freeze the world, but let the splat settle
+    }
+
+    // spawn
+    spawnTimer -= dt;
+    if (spawnTimer <= 0) { spawnObstacle(); spawnTimer = SPAWN_EVERY; }
+
+    // scroll + cull
+    for (const o of obstacles) o.x -= speed;
+    obstacles = obstacles.filter(o => o.x + o.w > -4);
+
+    // collision -> dead
+    for (const o of obstacles) {
+      if (hits(o)) {
+        state = 'dead';
+        sfx.hit();
+        if (score > best) { best = score; newBest = true; try { localStorage.setItem('gremlinRunBest', String(best)); } catch (e) {} }
+        emit(player.x + 13, player.y - 14, 22, { spread: Math.PI * 2, sp: 3.2, life: 40, c: '#7fae5a' });
+        emit(o.x + o.w / 2, GROUND_Y - o.h / 2, 14, { spread: Math.PI * 2, sp: 2.6, life: 34, c: '#8a6a3a' });
+        break;
+      }
+    }
+
+    // score accrues while alive (1 pt per ~6 frames at base speed)
+    score += 0.16 * (speed / 3.2);
+
+    // difficulty creep (capped)
+    speed = Math.min(speed + 0.0006 * dt, 7.5);
+    stepParticles(dt);
+  }
+
+  function stepParticles(dt) {
+    for (const p of particles) {
+      p.vy += 0.25;               // gravity on debris
+      p.x += p.vx; p.y += p.vy;
+      p.life += 1;
+    }
+    particles = particles.filter(p => p.life < p.maxLife);
+  }
+
+  function drawGremlin(x, y) {
+    // body
+    ctx.fillStyle = '#7fae5a';
+    ctx.fillRect(x, y - 30, 26, 30);
+    // ears
+    ctx.fillRect(x - 4, y - 34, 8, 8);
+    ctx.fillRect(x + 22, y - 34, 8, 8);
+    // eyes
+    ctx.fillStyle = '#e8d9c0';
+    ctx.fillRect(x + 5, y - 24, 6, 6);
+    ctx.fillRect(x + 15, y - 24, 6, 6);
+    ctx.fillStyle = '#14110e';
+    ctx.fillRect(x + 7, y - 22, 3, 3);
+    ctx.fillRect(x + 17, y - 22, 3, 3);
+  }
+
+  function render() {
+    ctx.clearRect(0, 0, W, H);
+    // ground
+    ctx.fillStyle = '#221a12';
+    ctx.fillRect(0, GROUND_Y, W, H - GROUND_Y);
+    ctx.fillStyle = '#3a2c1c';
+    ctx.fillRect(0, GROUND_Y, W, 2);
+    // player
+    drawGremlin(player.x, player.y);
+    // obstacles (spiky tumbleweeds)
+    for (const o of obstacles) {
+      const oy = GROUND_Y - o.h;
+      ctx.fillStyle = state === 'dead' ? '#7a4a2a' : '#8a6a3a';
+      ctx.fillRect(o.x, oy, o.w, o.h);
+      ctx.fillStyle = '#5a4426';
+      ctx.fillRect(o.x + 2, oy + 2, 2, o.h - 4);   // spike ridge line
+    }
+    // particles
+    for (const p of particles) {
+      const a = 1 - p.life / p.maxLife;
+      ctx.globalAlpha = Math.max(0, a);
+      ctx.fillStyle = p.c;
+      ctx.fillRect(Math.round(p.x), Math.round(p.y), 3, 3);
+    }
+    ctx.globalAlpha = 1;
+    // phase-4 HUD: score + best
+    ctx.fillStyle = '#e0b058';
+    ctx.font = '13px Courier New';
+    ctx.fillText('SCORE ' + Math.floor(score), 10, 20);
+    ctx.fillStyle = '#8a7658';
+    ctx.font = '11px Courier New';
+    ctx.fillText('BEST ' + Math.floor(best) + '  ·  v=' + speed.toFixed(1) + '  obs=' + obstacles.length + '  fx=' + particles.length, 10, 34);
+    if (state === 'dead') {
+      ctx.fillStyle = 'rgba(10,8,6,.72)'; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = '#e0522f'; ctx.font = '22px Courier New';
+      ctx.fillText('SPLAT.', W/2 - 42, H/2 - 30);
+      ctx.fillStyle = '#e8d9c0'; ctx.font = '15px Courier New';
+      const sc = 'score ' + Math.floor(score);
+      ctx.fillText(sc, W/2 - ctx.measureText(sc).width/2, H/2 + 2);
+      if (newBest) { ctx.fillStyle = '#e0b058'; ctx.fillText('★ new best', W/2 - ctx.measureText('★ new best').width/2, H/2 + 24); }
+      ctx.fillStyle = '#8a7658'; ctx.font = '12px Courier New';
+      ctx.fillText('R = again   ·   S = share score', W/2 - 96, H/2 + 48);
+    }
+  }
+
+  function frame(now) {
+    let dt = now - last;
+    last = now;
+    if (dt > 100) dt = 100;      // clamp: avoid spiral after tab-away
+    acc += dt;
+    while (acc >= STEP) { update(STEP); acc -= STEP; }
+    render();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
