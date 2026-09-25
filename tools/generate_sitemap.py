@@ -26,6 +26,7 @@ SITE = "https://eviethegremlinn.com"
 # most specific pattern first; first match wins
 RULES = [
     (re.compile(r"^index\.html$"), "1.0", "weekly"),
+    (re.compile(r"^profile/index\.html$"), "0.7", "monthly"),
     (re.compile(r"^projects/index\.html$"), "0.8", "weekly"),
     (re.compile(r"^projects/[^/]+/index\.html$"), "0.6", "monthly"),
     (re.compile(r"^(dom-inos|gremlin-run)/index\.html$"), "0.6", "yearly"),
