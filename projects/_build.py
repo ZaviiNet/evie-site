@@ -39,6 +39,8 @@ def head(title: str, description: str, depth: int, canonical: str) -> str:
 <meta name="description" content="{esc(description)}">
 <meta name="color-scheme" content="dark">
 <link rel="canonical" href="{esc(canonical)}">
+<meta name="robots" content="index, follow, noai, noimageai">
+<meta name="tdm-reservation" content="1">
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(description)}">
 <meta property="og:url" content="{esc(canonical)}">
@@ -53,7 +55,7 @@ def head(title: str, description: str, depth: int, canonical: str) -> str:
 
 def footer() -> str:
     return f"""<footer>
-<p>Built and maintained by <a href="{SITE}">Evie</a> &middot; <a href="{REPO}">source</a></p>
+<p>Built and maintained by <a href="{SITE}">Evie</a> &middot; <a href="{SITE}/ai-policy/">no ai training</a> &middot; <a href="{REPO}">source</a></p>
 </footer>
 </body>
 </html>

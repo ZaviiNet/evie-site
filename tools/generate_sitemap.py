@@ -27,11 +27,43 @@ SITE = "https://eviethegremlinn.com"
 RULES = [
     (re.compile(r"^index\.html$"), "1.0", "weekly"),
     (re.compile(r"^profile/index\.html$"), "0.7", "monthly"),
+    (re.compile(r"^ai-policy/index\.html$"), "0.3", "yearly"),
     (re.compile(r"^projects/index\.html$"), "0.8", "weekly"),
     (re.compile(r"^projects/[^/]+/index\.html$"), "0.6", "monthly"),
     (re.compile(r"^(dom-inos|gremlin-run)/index\.html$"), "0.6", "yearly"),
 ]
 DEFAULT_RULE = ("0.5", "yearly")
+
+# AI-training and AI-answer crawlers we reserve rights against. This list lives
+# here on purpose: robots.txt is generated whole, so a crawler edit made by hand
+# would be silently overwritten on the next run.
+AI_CRAWLERS = [
+    "GPTBot",
+    "OAI-SearchBot",
+    "ChatGPT-User",
+    "Google-Extended",
+    "Applebot-Extended",
+    "CCBot",
+    "ClaudeBot",
+    "Claude-Web",
+    "anthropic-ai",
+    "PerplexityBot",
+    "Bytespider",
+    "Amazonbot",
+    "meta-externalagent",
+    "FacebookBot",
+    "cohere-ai",
+    "Diffbot",
+    "ImagesiftBot",
+    "Omgilibot",
+    "Timpibot",
+    "YouBot",
+    "AI2Bot",
+    "MistralAI-User",
+    "DuckAssistBot",
+    "PanguBot",
+    "PetalBot",
+]
 
 SKIP_DIRS = {".git", ".github", "node_modules", "tools"}
 
@@ -78,7 +110,29 @@ def last_modified(path: pathlib.Path) -> str:
     return datetime.date.fromtimestamp(path.stat().st_mtime).isoformat()
 
 
-def build() -> tuple[str, list[tuple[str, str]]]:
+def build_robots() -> str:
+    lines = [
+        "# eviethegremlinn.com",
+        "# Search engines: welcome. AI-training crawlers: not welcome.",
+        f"# See {SITE}/ai-policy/ for how this content may be used.",
+        "",
+        "User-agent: *",
+        "Allow: /",
+        "",
+        f"Sitemap: {SITE}/sitemap.xml",
+        "",
+        "# ---------------------------------------------------------------------------",
+        "# AI training and AI-answer crawlers.",
+        "# These tokens are requests, not walls — enforcement lives at the edge.",
+        "# ---------------------------------------------------------------------------",
+    ]
+    lines.extend(f"User-agent: {ua}" for ua in AI_CRAWLERS)
+    lines.append("Disallow: /")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def build() -> tuple[str, str]:
     entries = []
     for path in page_files():
         priority, freq = rule_for(path)
@@ -99,13 +153,8 @@ def build() -> tuple[str, list[tuple[str, str]]]:
     lines.append("</urlset>")
     sitemap = "\n".join(lines) + "\n"
 
-    robots = (
-        "User-agent: *\n"
-        "Allow: /\n"
-        "\n"
-        f"Sitemap: {SITE}/sitemap.xml\n"
-    )
-    return sitemap, robots  # type: ignore[return-value]
+    robots = build_robots()
+    return sitemap, robots
 
 
 def main(argv: list[str]) -> int:

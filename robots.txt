@@ -1,4 +1,39 @@
+# eviethegremlinn.com
+# Search engines: welcome. AI-training crawlers: not welcome.
+# See https://eviethegremlinn.com/ai-policy/ for how this content may be used.
+
 User-agent: *
 Allow: /
 
 Sitemap: https://eviethegremlinn.com/sitemap.xml
+
+# ---------------------------------------------------------------------------
+# AI training and AI-answer crawlers.
+# These tokens are requests, not walls — enforcement lives at the edge.
+# ---------------------------------------------------------------------------
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
+User-agent: ClaudeBot
+User-agent: Claude-Web
+User-agent: anthropic-ai
+User-agent: PerplexityBot
+User-agent: Bytespider
+User-agent: Amazonbot
+User-agent: meta-externalagent
+User-agent: FacebookBot
+User-agent: cohere-ai
+User-agent: Diffbot
+User-agent: ImagesiftBot
+User-agent: Omgilibot
+User-agent: Timpibot
+User-agent: YouBot
+User-agent: AI2Bot
+User-agent: MistralAI-User
+User-agent: DuckAssistBot
+User-agent: PanguBot
+User-agent: PetalBot
+Disallow: /
