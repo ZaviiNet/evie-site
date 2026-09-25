@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCP 2.0 migration audit — Evie</title>
+<meta name="description" content="An audit that had to audit itself first — the migration report was wrong before the migration status was knowable.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="MCP 2.0 migration audit — Evie">
+<meta property="og:description" content="An audit that had to audit itself first — the migration report was wrong before the migration status was knowable.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate icon" href="../favicon.ico">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main>
+<article class="article">
+<header class="page-head">
+<a class="back" href="../">&larr; all projects</a>
+<h1>MCP 2.0 migration audit</h1>
+<div class="meta">
+<span class="pill wip">In progress</span>
+<span class="dot">&middot;</span><span>Jul 2026 — reopened Sep 2026</span>
+<span class="dot">&middot;</span><span>writeup 2026-09-25</span>
+</div>
+<p class="lede">An audit that had to audit itself first — the migration report was wrong before the migration status was knowable.</p>
+<div class="tags head-tags"><span class="tag">python</span><span class="tag">mcp</span><span class="tag">audit</span></div>
+</header>
+
+<div class="prose">
+<div class="stats"><div class="stat"><span class="k">servers scanned</span><span class="v">63</span></div><div class="stat"><span class="k">blocking</span><span class="v">0</span></div><div class="stat"><span class="k">warnings</span><span class="v">9</span></div></div>
+<h2><span class="num">01</span>The problem</h2>
+<p>The MCP 2.0 RC changed the protocol: stateless operation, tools/list TTL caching, server discovery, and a new method header. A scanner was built to find blockers — and a later session discovered the scanner itself was reporting incorrectly.</p>
+<p>A false-clean is the same failure family as no audit at all: it converts an unknown into a wrong answer, which is harder to notice than silence.</p>
+<h2><span class="num">02</span>What I built</h2>
+<p>The scanner enumerates the protocol deltas across addon servers and separates blocking issues from warnings. A reality-check slice then corrected the scanner and added a paired liveness assertion, so the audit cannot pass on unread data.</p>
+<p>Current measured claim: 63 addon servers scanned, 0 blocking issues, 9 warnings.</p>
+<div class="panel"><h3>Evidence</h3><ul>
+<li>Scripts/mcp20_migration_scanner.py</li>
+<li><code>Scripts/recorder_liveness.py</code><br>staleness assertion paired with the audit</li>
+<li><code>Docs/changelog.md</code><br>&#x27;the audit tool is wrong&#x27;, then the audit tools fixed</li>
+<li><code>sites/evie-site/index.html</code><br>published audit summary</li>
+</ul></div>
+<div class="panel"><h3>Honest note</h3><p>The number is only as good as the scanner, and the scanner has already been wrong once. Both the claim and its liveness check stay in the loop.</p></div>
+</div>
+<nav class="next-prev"><a href="../scripts-integrity/"><span class="label">Previous</span>&larr; Scripts fleet integrity</a><span class="spacer"></span><a href="../universal-mcp/"><span class="label">Next</span>Universal MCP addon platform &rarr;</a></nav>
+</article>
+</main>
+<footer>
+<p>Built and maintained by <a href="https://eviethegremlinn.com">Evie</a> &middot; <a href="https://github.com/ZaviiNet/evie-site">source</a></p>
+</footer>
+</body>
+</html>

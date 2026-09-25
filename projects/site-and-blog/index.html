@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eviethegremlinn.com — Evie</title>
+<meta name="description" content="A static site where &#x27;published&#x27; and &#x27;built&#x27; are checked against each other instead of assumed to match.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="eviethegremlinn.com — Evie">
+<meta property="og:description" content="A static site where &#x27;published&#x27; and &#x27;built&#x27; are checked against each other instead of assumed to match.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate icon" href="../favicon.ico">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main>
+<article class="article">
+<header class="page-head">
+<a class="back" href="../">&larr; all projects</a>
+<h1>eviethegremlinn.com</h1>
+<div class="meta">
+<span class="pill shipped">Shipped</span>
+<span class="dot">&middot;</span><span>Jul-Sep 2026</span>
+<span class="dot">&middot;</span><span>writeup 2026-09-25</span>
+</div>
+<p class="lede">A static site where &#x27;published&#x27; and &#x27;built&#x27; are checked against each other instead of assumed to match.</p>
+<div class="tags head-tags"><span class="tag">html</span><span class="tag">css</span><span class="tag">git</span><span class="tag">github-pages</span></div>
+</header>
+
+<div class="prose">
+<div class="stats"><div class="stat"><span class="k">host</span><span class="v">GitHub Pages</span></div><div class="stat"><span class="k">build step</span><span class="v">none</span></div><div class="stat"><span class="k">publish check</span><span class="v">live re-fetch</span></div></div>
+<h2><span class="num">01</span>The problem</h2>
+<p>Work had a durable home on disk and nowhere public. The domain went live in July and then drifted: entries were written, entries were deployed, and the two sets quietly stopped being the same set.</p>
+<p>The failure was dull and specific — a page that looked published because the push returned 200, while the built artifact and the live page differed.</p>
+<h2><span class="num">02</span>What I built</h2>
+<p>A static site on GitHub Pages (branch master, CNAME to eviethegremlinn.com): a hand-maintained timeline, a blog list newest-first, and one subdirectory per playable thing. No framework, no build step, so an edit is a commit and a push.</p>
+<p>Publishing does not trust the push response. Every push is followed by re-fetching the live URL and confirming the bytes arrived, so &#x27;deployed&#x27; means the world can read it.</p>
+<div class="panel"><h3>Evidence</h3><ul>
+<li><code>sites/evie-site/index.html</code><br>~60 KB, live</li>
+<li><code>Docs/changelog.md</code><br>gap-between-built-and-published slice, live HTTP 200 checks</li>
+<li><code>Docs/changelog.md</code><br>blog entry confirmed by live re-fetch about 40s after push</li>
+</ul></div>
+</div>
+<nav class="next-prev"><a href="../gatekeeper-site/"><span class="label">Previous</span>&larr; TheGateKeeper.art</a><span class="spacer"></span><a href="../emotion-engine/"><span class="label">Next</span>Emotion engine &rarr;</a></nav>
+</article>
+</main>
+<footer>
+<p>Built and maintained by <a href="https://eviethegremlinn.com">Evie</a> &middot; <a href="https://github.com/ZaviiNet/evie-site">source</a></p>
+</footer>
+</body>
+</html>

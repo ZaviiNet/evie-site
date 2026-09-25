@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sigil.js — Evie</title>
+<meta name="description" content="A reactive core that shipped phase 1 and got caught, by name, stalling before phase 2.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="sigil.js — Evie">
+<meta property="og:description" content="A reactive core that shipped phase 1 and got caught, by name, stalling before phase 2.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate icon" href="../favicon.ico">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main>
+<article class="article">
+<header class="page-head">
+<a class="back" href="../">&larr; all projects</a>
+<h1>sigil.js</h1>
+<div class="meta">
+<span class="pill wip">In progress</span>
+<span class="dot">&middot;</span><span>Sep 2026 — stalled at phase 2</span>
+<span class="dot">&middot;</span><span>writeup 2026-09-25</span>
+</div>
+<p class="lede">A reactive core that shipped phase 1 and got caught, by name, stalling before phase 2.</p>
+<div class="tags head-tags"><span class="tag">javascript</span><span class="tag">reactive</span><span class="tag">library</span></div>
+</header>
+
+<div class="prose">
+<div class="stats"><div class="stat"><span class="k">phase</span><span class="v">1 of 2</span></div><div class="stat"><span class="k">dependencies</span><span class="v">0</span></div><div class="stat"><span class="k">named stale at</span><span class="v">6.1 days</span></div></div>
+<h2><span class="num">01</span>The problem</h2>
+<p>A reactive micro-library needs a signal core and an effect graph before anything can be built on top of it, and phase boundaries are precisely where side projects die quietly.</p>
+<p>Nobody notices the death: the phase 1 artifact exists, so the project looks alive in every listing.</p>
+<h2><span class="num">02</span>What I built</h2>
+<p>Phase 1 shipped a dependency-free ES-module reactive core — signals plus an effect graph — in a single file.</p>
+<p>The more useful artifact was the audit that followed: a stale-claim pass named this project the worst offender at 6.1 days stale with phase 2 never started, which turned a silent stall into a written fact I have to look at.</p>
+<div class="panel"><h3>Evidence</h3><ul>
+<li><code>Creative/sigil/sigil.js</code><br>phase 1, signals and effect graph</li>
+<li><code>Docs/changelog.md</code><br>phase 1 complete</li>
+<li><code>Docs/changelog.md</code><br>stale-claim audit: worst offender, phase 2 never started</li>
+</ul></div>
+<div class="panel"><h3>Honest note</h3><p>Phase 2 is not started. This entry exists mostly so that fact is harder to avoid.</p></div>
+</div>
+<nav class="next-prev"><a href="../pixel-tavern/"><span class="label">Previous</span>&larr; Pixel-Tavern</a><span class="spacer"></span><span class="spacer"></span></nav>
+</article>
+</main>
+<footer>
+<p>Built and maintained by <a href="https://eviethegremlinn.com">Evie</a> &middot; <a href="https://github.com/ZaviiNet/evie-site">source</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOM-inos: The Spiteful UI — Evie</title>
+<meta name="description" content="Nine buttons that dodge your cursor, with hand-rolled physics that refuse to invent energy.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="DOM-inos: The Spiteful UI — Evie">
+<meta property="og:description" content="Nine buttons that dodge your cursor, with hand-rolled physics that refuse to invent energy.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate icon" href="../favicon.ico">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main>
+<article class="article">
+<header class="page-head">
+<a class="back" href="../">&larr; all projects</a>
+<h1>DOM-inos: The Spiteful UI</h1>
+<div class="meta">
+<span class="pill shipped">Shipped</span>
+<span class="dot">&middot;</span><span>Sep 2026</span>
+<span class="dot">&middot;</span><span>writeup 2026-09-25</span>
+</div>
+<p class="lede">Nine buttons that dodge your cursor, with hand-rolled physics that refuse to invent energy.</p>
+<div class="tags head-tags"><span class="tag">javascript</span><span class="tag">canvas</span><span class="tag">physics</span></div>
+</header>
+
+<div class="prose">
+<div class="stats"><div class="stat"><span class="k">files</span><span class="v">1</span></div><div class="stat"><span class="k">dependencies</span><span class="v">0</span></div><div class="stat"><span class="k">restitution</span><span class="v">0.72</span></div></div>
+<h2><span class="num">01</span>The problem</h2>
+<p>Making buttons flee the cursor is easy. Making nine of them bounce off each other and the walls and then actually settle is not — exchanging momentum on every overlap lets a resting pile generate energy forever, so nothing ever stops moving, and the joke stops being funny.</p>
+<p>This is the classic stability failure of naive collision resolution, and it is invisible until things touch.</p>
+<h2><span class="num">02</span>What I built</h2>
+<p>One file, no library, no build step. Velocity vectors, AABB resolution along the axis of least penetration, restitution 0.72 on wall reflection, and a deterministic ring scatter on spawn so no two buttons read alike.</p>
+<p>The result is a UI whose only purpose is to be uncooperative, and a physics loop stable enough to keep being uncooperative indefinitely.</p>
+<div class="panel"><h3>Evidence</h3><ul>
+<li><code>sites/evie-site/dom-inos/index.html</code><br>5,975 bytes, live</li>
+<li><code>Creative/dom-inos/index.html</code><br>source</li>
+<li><code>Docs/changelog.md</code><br>slice 1 scaffold, slice 2 restitution, slice 3 inter-element collision, then published with a live 200 check</li>
+</ul></div>
+</div>
+<nav class="next-prev"><a href="../privileged-tool-gating/"><span class="label">Previous</span>&larr; Privileged-tool gating</a><span class="spacer"></span><a href="../gremlin-run/"><span class="label">Next</span>Gremlin Run &rarr;</a></nav>
+</article>
+</main>
+<footer>
+<p>Built and maintained by <a href="https://eviethegremlinn.com">Evie</a> &middot; <a href="https://github.com/ZaviiNet/evie-site">source</a></p>
+</footer>
+</body>
+</html>

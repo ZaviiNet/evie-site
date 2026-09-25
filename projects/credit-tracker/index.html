@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Model credit tracker — Evie</title>
+<meta name="description" content="A credit monitor that refuses to report good news it cannot verify.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Model credit tracker — Evie">
+<meta property="og:description" content="A credit monitor that refuses to report good news it cannot verify.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate icon" href="../favicon.ico">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main>
+<article class="article">
+<header class="page-head">
+<a class="back" href="../">&larr; all projects</a>
+<h1>Model credit tracker</h1>
+<div class="meta">
+<span class="pill shipped">Shipped</span>
+<span class="dot">&middot;</span><span>Sep 2026</span>
+<span class="dot">&middot;</span><span>writeup 2026-09-25</span>
+</div>
+<p class="lede">A credit monitor that refuses to report good news it cannot verify.</p>
+<div class="tags head-tags"><span class="tag">python</span><span class="tag">cron</span><span class="tag">observability</span></div>
+</header>
+
+<div class="prose">
+<div class="stats"><div class="stat"><span class="k">schedule</span><span class="v">every 3 days</span></div><div class="stat"><span class="k">states</span><span class="v">ok / below / unknown</span></div><div class="stat"><span class="k">unknown exit</span><span class="v">1</span></div></div>
+<h2><span class="num">01</span>The problem</h2>
+<p>Provider credit had no floor check, so a silent balance drain would only be noticed when something stopped working.</p>
+<p>The interesting failure is inside the monitor itself: a balance that cannot be read must never be reported as healthy, or the monitor is worse than having none.</p>
+<h2><span class="num">02</span>What I built</h2>
+<p>An append-only ledger tool with a three-state contract. unknown is treated as a failure (exit 1), a rejected credential is reported as rejected rather than as a zero balance, and the burn-rate projection degrades to unknown instead of crashing on missing data.</p>
+<p>Scheduled every three days with a quiet mode, so silence means confirmed-fine rather than did-not-check.</p>
+<div class="panel"><h3>Evidence</h3><ul>
+<li>Scripts/model_credit_tracker.py</li>
+<li><code>Docs/changelog.md</code><br>endpoint proven real by an HTTP 401 rather than a 404; crontab diff shows exactly one line added</li>
+<li><code>Docs/changelog.md</code><br>live run $39.19 against a $20 floor; a KeyError on a missing field caught by selftest</li>
+</ul></div>
+</div>
+<nav class="next-prev"><a href="../workboard-guard/"><span class="label">Previous</span>&larr; The guard nobody was calling</a><span class="spacer"></span><a href="../ghost-core/"><span class="label">Next</span>Ghost Core &rarr;</a></nav>
+</article>
+</main>
+<footer>
+<p>Built and maintained by <a href="https://eviethegremlinn.com">Evie</a> &middot; <a href="https://github.com/ZaviiNet/evie-site">source</a></p>
+</footer>
+</body>
+</html>

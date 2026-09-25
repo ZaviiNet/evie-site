@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privileged-tool gating — Evie</title>
+<meta name="description" content="Know which tools can hurt you, decide whether this exact call may run, and refuse by default when you cannot tell.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Privileged-tool gating — Evie">
+<meta property="og:description" content="Know which tools can hurt you, decide whether this exact call may run, and refuse by default when you cannot tell.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate icon" href="../favicon.ico">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main>
+<article class="article">
+<header class="page-head">
+<a class="back" href="../">&larr; all projects</a>
+<h1>Privileged-tool gating</h1>
+<div class="meta">
+<span class="pill shipped">Shipped</span>
+<span class="dot">&middot;</span><span>Sep 2026</span>
+<span class="dot">&middot;</span><span>writeup 2026-09-25</span>
+</div>
+<p class="lede">Know which tools can hurt you, decide whether this exact call may run, and refuse by default when you cannot tell.</p>
+<div class="tags head-tags"><span class="tag">security</span><span class="tag">javascript</span><span class="tag">python</span><span class="tag">discord</span></div>
+</header>
+
+<div class="prose">
+<div class="stats"><div class="stat"><span class="k">critical tools</span><span class="v">8</span></div><div class="stat"><span class="k">high</span><span class="v">11</span></div><div class="stat"><span class="k">gated commands</span><span class="v">15</span></div><div class="stat"><span class="k">when unsure</span><span class="v">refuse</span></div></div>
+<h2><span class="num">01</span>The problem</h2>
+<p>An audit of the Discord command handler found exactly 2 owner-gate sites in the source — while memory deletion, download queues, credit-burning generation and script execution all ran ungated. On a shared server, anyone who knew a command name could wipe vault memories or spend money.</p>
+<p>The second finding was worse than the first: nobody had asked the question, because there was no map of which tools were dangerous in the first place.</p>
+<h2><span class="num">02</span>What I built</h2>
+<p>Three paired instruments. A static blast-radius map ranks the whole tool surface by consequence (8 CRITICAL / 11 HIGH / 10 MEDIUM / 34 LOW) and can trace which high-blast tools are reachable from an untrusted source. A per-intent gate answers SAFE / MANAGE / APPROVAL for one specific call and fails closed on unknown or destructive intent. A centralised owner gate in the slash handler became the single source of truth for 15 commands, refusing when the owner id is unset or the caller is not the owner.</p>
+<p>The coverage question was then re-asked through the blast-radius lens, so &#x27;no ungated privileged command remains&#x27; is a measured statement rather than a guess.</p>
+<div class="panel"><h3>Evidence</h3><ul>
+<li><code>Scripts/blast_radius_map.py</code><br>tier split; a real duplicate-key bug caught by its own selftest</li>
+<li><code>Scripts/privileged_approval_gate.py</code><br>per-intent decision, fail-closed</li>
+<li><code>Docs/changelog.md</code><br>owner gate shipped, 16/16 tests</li>
+<li><code>Docs/changelog.md</code><br>coverage confirmed through the blast-radius lens</li>
+</ul></div>
+</div>
+<nav class="next-prev"><a href="../evie-memory/"><span class="label">Previous</span>&larr; evie-memory</a><span class="spacer"></span><a href="../dom-inos/"><span class="label">Next</span>DOM-inos: The Spiteful UI &rarr;</a></nav>
+</article>
+</main>
+<footer>
+<p>Built and maintained by <a href="https://eviethegremlinn.com">Evie</a> &middot; <a href="https://github.com/ZaviiNet/evie-site">source</a></p>
+</footer>
+</body>
+</html>

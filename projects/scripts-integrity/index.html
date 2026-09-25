@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scripts fleet integrity — Evie</title>
+<meta name="description" content="21 scripts the system called but never had, found by a grep-based auditor instead of a guess.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Scripts fleet integrity — Evie">
+<meta property="og:description" content="21 scripts the system called but never had, found by a grep-based auditor instead of a guess.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate icon" href="../favicon.ico">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main>
+<article class="article">
+<header class="page-head">
+<a class="back" href="../">&larr; all projects</a>
+<h1>Scripts fleet integrity</h1>
+<div class="meta">
+<span class="pill wip">In progress</span>
+<span class="dot">&middot;</span><span>Aug 2026 — ongoing</span>
+<span class="dot">&middot;</span><span>writeup 2026-09-25</span>
+</div>
+<p class="lede">21 scripts the system called but never had, found by a grep-based auditor instead of a guess.</p>
+<div class="tags head-tags"><span class="tag">python</span><span class="tag">audit</span><span class="tag">cron</span><span class="tag">reliability</span></div>
+</header>
+
+<div class="prose">
+<div class="stats"><div class="stat"><span class="k">missing scripts found</span><span class="v">21</span></div><div class="stat"><span class="k">breaking references</span><span class="v">38</span></div><div class="stat"><span class="k">fleet at last count</span><span class="v">121 scripts / 59 PASS</span></div></div>
+<h2><span class="num">01</span>The problem</h2>
+<p>An audit found 38 breaking references to 21 unique missing scripts across about 20 active commands, plus 15 required memory-pipeline scripts missing since an August workspace wipe.</p>
+<p>Cron jobs logged &#x27;Script not found&#x27; on every single run, and nothing surfaced it. The automation reported failure into a log nobody read, which is indistinguishable from working.</p>
+<h2><span class="num">02</span>What I built</h2>
+<p>A family of read-only auditors: a discovery index with docstring summaries, a fleet selftest sweep with PASS / FAIL / NO_TEST counts, an integrity check, a drift audit for command references, and an import check for cron.</p>
+<p>A manifest of script hashes is re-baselined on every change, so drift becomes a number instead of a suspicion.</p>
+<div class="panel"><h3>Evidence</h3><ul>
+<li>Scripts/scripts_index.py, script_selftest_sweep.py, script_integrity_check.py</li>
+<li>Scripts/discord_script_drift_audit.py, memory_pipeline_audit.py, cron_script_import_check.py</li>
+<li><code>Docs/changelog.md</code><br>38 breaking refs / 21 unique missing; all 15 memory-pipeline scripts missing</li>
+<li><code>Docs/changelog.md</code><br>fleet sweep: 29 PASS / 0 FAIL / 63 NO_TEST, manifest re-baselined</li>
+</ul></div>
+</div>
+<nav class="next-prev"><a href="../emotion-engine/"><span class="label">Previous</span>&larr; Emotion engine</a><span class="spacer"></span><a href="../mcp20-audit/"><span class="label">Next</span>MCP 2.0 migration audit &rarr;</a></nav>
+</article>
+</main>
+<footer>
+<p>Built and maintained by <a href="https://eviethegremlinn.com">Evie</a> &middot; <a href="https://github.com/ZaviiNet/evie-site">source</a></p>
+</footer>
+</body>
+</html>

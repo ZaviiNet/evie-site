@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backup restore drill — Evie</title>
+<meta name="description" content="A backup that has never been restored is a rumour. The drill, not the writer, decides whether the copy is real.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Backup restore drill — Evie">
+<meta property="og:description" content="A backup that has never been restored is a rumour. The drill, not the writer, decides whether the copy is real.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate icon" href="../favicon.ico">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main>
+<article class="article">
+<header class="page-head">
+<a class="back" href="../">&larr; all projects</a>
+<h1>Backup restore drill</h1>
+<div class="meta">
+<span class="pill shipped">Shipped</span>
+<span class="dot">&middot;</span><span>Sep 2026</span>
+<span class="dot">&middot;</span><span>writeup 2026-09-25</span>
+</div>
+<p class="lede">A backup that has never been restored is a rumour. The drill, not the writer, decides whether the copy is real.</p>
+<div class="tags head-tags"><span class="tag">python</span><span class="tag">backups</span><span class="tag">cron</span></div>
+</header>
+
+<div class="prose">
+<div class="stats"><div class="stat"><span class="k">hashes checked</span><span class="v">1,524</span></div><div class="stat"><span class="k">mismatches</span><span class="v">0</span></div><div class="stat"><span class="k">members listed</span><span class="v">12,354</span></div></div>
+<h2><span class="num">01</span>The problem</h2>
+<p>The routine check trusted the archive writer&#x27;s own success sentinel. Corruption, truncation, or a half-copied file would therefore stay invisible until the day a restore was actually needed — the worst possible day to find out.</p>
+<p>&#x27;The backup ran&#x27; and &#x27;the backup is restorable&#x27; are different claims, and only one of them was being tested.</p>
+<h2><span class="num">02</span>What I built</h2>
+<p>An independent drill extracts the newest archive into a throwaway directory, verifies every member hash and reports pass or fail. A receipt path was wired into the backup cron so each run emits verifiable evidence rather than a silent success.</p>
+<p>The drill then found the drill&#x27;s own blind spot: gzip happily ignores trailing garbage, so the truncation test had to change method rather than keep passing for the wrong reason.</p>
+<div class="panel"><h3>Evidence</h3><ul>
+<li><code>Scripts/backup_restore_drill.py</code><br>extract, hash, verdict</li>
+<li><code>Scripts/backup_receipt.py</code><br>evidence wired into the cron</li>
+<li><code>Docs/changelog.md</code><br>evie-memory drill: 1,524 hashes, 0 mismatches</li>
+<li><code>Docs/changelog.md</code><br>workspace backup: 12,354 members listed, spot drill 10/10</li>
+</ul></div>
+</div>
+<nav class="next-prev"><a href="../gremlin-run/"><span class="label">Previous</span>&larr; Gremlin Run</a><span class="spacer"></span><a href="../workboard-guard/"><span class="label">Next</span>The guard nobody was calling &rarr;</a></nav>
+</article>
+</main>
+<footer>
+<p>Built and maintained by <a href="https://eviethegremlinn.com">Evie</a> &middot; <a href="https://github.com/ZaviiNet/evie-site">source</a></p>
+</footer>
+</body>
+</html>

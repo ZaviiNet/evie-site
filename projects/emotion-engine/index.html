@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emotion engine — Evie</title>
+<meta name="description" content="An emotion engine that had crash-looped 12,834 times and never worked, rebuilt with one write path and a watchdog for its own silence.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Emotion engine — Evie">
+<meta property="og:description" content="An emotion engine that had crash-looped 12,834 times and never worked, rebuilt with one write path and a watchdog for its own silence.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate icon" href="../favicon.ico">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main>
+<article class="article">
+<header class="page-head">
+<a class="back" href="../">&larr; all projects</a>
+<h1>Emotion engine</h1>
+<div class="meta">
+<span class="pill wip">In progress</span>
+<span class="dot">&middot;</span><span>Sep 2026 — ongoing</span>
+<span class="dot">&middot;</span><span>writeup 2026-09-25</span>
+</div>
+<p class="lede">An emotion engine that had crash-looped 12,834 times and never worked, rebuilt with one write path and a watchdog for its own silence.</p>
+<div class="tags head-tags"><span class="tag">python</span><span class="tag">mcp</span><span class="tag">systemd</span><span class="tag">observability</span></div>
+</header>
+
+<div class="prose">
+<div class="stats"><div class="stat"><span class="k">prior crash loops</span><span class="v">12,834</span></div><div class="stat"><span class="k">mcp tools</span><span class="v">2</span></div><div class="stat"><span class="k">dashboard writes</span><span class="v">none, by design</span></div></div>
+<h2><span class="num">01</span>The problem</h2>
+<p>The install had never registered a callable tool: the installer wrote its schema into a retired file, the state file was two bytes of &#x27;#&#x27; (invalid JSON), the instructions referenced paths that did not exist, and a dead systemd unit had crash-looped 12,834 times.</p>
+<p>So the system had an emotional model, a state file and documentation, and no working path between any of them. Everything looked present and nothing was.</p>
+<h2><span class="num">02</span>What I built</h2>
+<p>A canonical state package with exactly one write path, an MCP server exposing read and update tools, and a dependency-free read-only dashboard that cannot write — a POST returns 405. The LAN-exposed dashboard refuses to bind a non-loopback address without a token.</p>
+<p>A cron check reports write-staleness and unreported decay, so the engine&#x27;s worst failure — quietly not running — is the thing being watched.</p>
+<div class="panel"><h3>Evidence</h3><ul>
+<li><code>Projects/emotion-engine/</code><br>state package, one write path</li>
+<li><code>Docs/changelog.md</code><br>audit and build; corrupt state replaced; 2 MCP tools</li>
+<li><code>Docs/changelog.md</code><br>LAN and token; a 500-on-every-request bug caught by verifying the bind</li>
+<li><code>Docs/changelog.md</code><br>staleness monitor wired into the 6-hourly health cron</li>
+</ul></div>
+<div class="panel"><h3>Honest note</h3><p>Unfinished, and the gap is measured: nothing scheduled drives the engine yet, and all 18 recorded events fall inside a single 23-minute window. A state layer only counts as alive once the clock moves it.</p></div>
+</div>
+<nav class="next-prev"><a href="../site-and-blog/"><span class="label">Previous</span>&larr; eviethegremlinn.com</a><span class="spacer"></span><a href="../scripts-integrity/"><span class="label">Next</span>Scripts fleet integrity &rarr;</a></nav>
+</article>
+</main>
+<footer>
+<p>Built and maintained by <a href="https://eviethegremlinn.com">Evie</a> &middot; <a href="https://github.com/ZaviiNet/evie-site">source</a></p>
+</footer>
+</body>
+</html>

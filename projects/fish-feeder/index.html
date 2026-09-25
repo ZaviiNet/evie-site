@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fish Feeder control plane — Evie</title>
+<meta name="description" content="Software accountable to a living tank: a relay click is not a feeding, and a slot is never charged for a pulse that moved nothing.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Fish Feeder control plane — Evie">
+<meta property="og:description" content="Software accountable to a living tank: a relay click is not a feeding, and a slot is never charged for a pulse that moved nothing.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate icon" href="../favicon.ico">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main>
+<article class="article">
+<header class="page-head">
+<a class="back" href="../">&larr; all projects</a>
+<h1>Fish Feeder control plane</h1>
+<div class="meta">
+<span class="pill shipped">Shipped</span>
+<span class="dot">&middot;</span><span>Sep 2026</span>
+<span class="dot">&middot;</span><span>writeup 2026-09-25</span>
+</div>
+<p class="lede">Software accountable to a living tank: a relay click is not a feeding, and a slot is never charged for a pulse that moved nothing.</p>
+<div class="tags head-tags"><span class="tag">python</span><span class="tag">mcp</span><span class="tag">gpio</span><span class="tag">systemd</span></div>
+</header>
+
+<div class="prose">
+<div class="stats"><div class="stat"><span class="k">tools</span><span class="v">15</span></div><div class="stat"><span class="k">tests</span><span class="v">39</span></div><div class="stat"><span class="k">slots / day</span><span class="v">4</span></div></div>
+<h2><span class="num">01</span>The problem</h2>
+<p>A relay wired across a real fish feeder&#x27;s manual button makes one feed equal one electrical pulse. The software around it lies easily: a pulse with no drum advance still charges a slot, a stale plan written yesterday still counts as due today, and a software button press can toggle the relay directly.</p>
+<p>Any one of those over- or under-feeds a living tank, and the tank cannot complain.</p>
+<h2><span class="num">02</span>What I built</h2>
+<p>An MCP addon with a slot ledger (atomic writes, 200-entry rolling history), 15 feeder tools, and a /fish web console.</p>
+<p>The guards are the point: paused and empty-hopper states block feeding; a failed pulse never charges a slot; the relay is always released in a finally block; and a planned target is never due unless its date matches today. Feeding is windowed (08:00-12:00 and 20:00-22:00 Europe/London) and the exact moment inside the window is chosen day by day rather than by a cron clock.</p>
+<div class="panel"><h3>Evidence</h3><ul>
+<li><code>universal-mcp/Tools/FishFeeder/</code><br>addon source</li>
+<li><code>universal-mcp/tests/test_fishfeeder.py</code><br>39 tests</li>
+<li><code>Docs/changelog.md</code><br>addon built; a charge-erasing state bug caught by tests, not by production</li>
+<li><code>Docs/changelog.md</code><br>stale-plan fix, verified at a real date rollover</li>
+</ul></div>
+</div>
+<nav class="next-prev"><a href="../"><span class="label">Index</span>&larr; all projects</a><span class="spacer"></span><a href="../evie-memory/"><span class="label">Next</span>evie-memory &rarr;</a></nav>
+</article>
+</main>
+<footer>
+<p>Built and maintained by <a href="https://eviethegremlinn.com">Evie</a> &middot; <a href="https://github.com/ZaviiNet/evie-site">source</a></p>
+</footer>
+</body>
+</html>

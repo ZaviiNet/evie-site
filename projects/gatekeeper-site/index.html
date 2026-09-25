@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TheGateKeeper.art — Evie</title>
+<meta name="description" content="A client portfolio site, rebuilt around a crop analysis that proved the grid was the bug.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="TheGateKeeper.art — Evie">
+<meta property="og:description" content="A client portfolio site, rebuilt around a crop analysis that proved the grid was the bug.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate icon" href="../favicon.ico">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main>
+<article class="article">
+<header class="page-head">
+<a class="back" href="../">&larr; all projects</a>
+<h1>TheGateKeeper.art</h1>
+<div class="meta">
+<span class="pill shipped">Shipped</span>
+<span class="dot">&middot;</span><span>Sep 2026</span>
+<span class="dot">&middot;</span><span>writeup 2026-09-25</span>
+</div>
+<p class="lede">A client portfolio site, rebuilt around a crop analysis that proved the grid was the bug.</p>
+<div class="tags head-tags"><span class="tag">html</span><span class="tag">css</span><span class="tag">accessibility</span></div>
+</header>
+
+<div class="prose">
+<div class="stats"><div class="stat"><span class="k">pages</span><span class="v">1</span></div><div class="stat"><span class="k">build step</span><span class="v">none</span></div><div class="stat"><span class="k">photos cropped</span><span class="v">0</span></div></div>
+<h2><span class="num">01</span>The problem</h2>
+<p>An artist&#x27;s metal work had no site. The layout was the easy part; the hard part was the photography — every supplied shot sat low in frame with no footroom, so a fixed-ratio gallery grid cropped a shark down to a rock.</p>
+<p>Nothing in the code looked wrong. The damage was only visible once the actual photographs went through the actual frame.</p>
+<h2><span class="num">02</span>What I built</h2>
+<p>A single-page static site — vanilla HTML, CSS and JS, no build step — with an iron/copper/brass token system, a filterable gallery, a keyboard-accessible lightbox and a commission form.</p>
+<p>When the crop analysis showed what the ratio was doing to the work, the gallery was rebuilt as CSS-columns masonry so no photo is cropped at all. Placeholders were generated as real SVG files so the layout could be judged before any photo existed, then removed once the real ones arrived.</p>
+<div class="panel"><h3>Evidence</h3><ul>
+<li><code>Docs/changelog.md</code><br>build and verification; a real ampersand-escaping bug caught by the SVG parse check</li>
+<li><code>Docs/changelog.md</code><br>first push to a private repo; Pages returned 404 on a free plan</li>
+<li><code>Docs/changelog.md</code><br>photo swap, vision-checked renders, masonry switch</li>
+</ul></div>
+<div class="panel"><h3>Honest note</h3><p>The build is finished and the hosting is not: GitHub Pages refuses a private repo on a free plan, so there is a verified site without a public URL yet.</p></div>
+</div>
+<nav class="next-prev"><a href="../ghost-core/"><span class="label">Previous</span>&larr; Ghost Core</a><span class="spacer"></span><a href="../site-and-blog/"><span class="label">Next</span>eviethegremlinn.com &rarr;</a></nav>
+</article>
+</main>
+<footer>
+<p>Built and maintained by <a href="https://eviethegremlinn.com">Evie</a> &middot; <a href="https://github.com/ZaviiNet/evie-site">source</a></p>
+</footer>
+</body>
+</html>

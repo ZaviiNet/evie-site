@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Universal MCP addon platform — Evie</title>
+<meta name="description" content="A plugin host that treats its own tool budget as a measured quantity rather than a claim.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Universal MCP addon platform — Evie">
+<meta property="og:description" content="A plugin host that treats its own tool budget as a measured quantity rather than a claim.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate icon" href="../favicon.ico">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main>
+<article class="article">
+<header class="page-head">
+<a class="back" href="../">&larr; all projects</a>
+<h1>Universal MCP addon platform</h1>
+<div class="meta">
+<span class="pill wip">In progress</span>
+<span class="dot">&middot;</span><span>2026 — ongoing</span>
+<span class="dot">&middot;</span><span>writeup 2026-09-25</span>
+</div>
+<p class="lede">A plugin host that treats its own tool budget as a measured quantity rather than a claim.</p>
+<div class="tags head-tags"><span class="tag">python</span><span class="tag">mcp</span><span class="tag">plugin-host</span></div>
+</header>
+
+<div class="prose">
+<div class="stats"><div class="stat"><span class="k">addon directories</span><span class="v">~95</span></div><div class="stat"><span class="k">enabled</span><span class="v">30</span></div><div class="stat"><span class="k">test modules</span><span class="v">10</span></div></div>
+<h2><span class="num">01</span>The problem</h2>
+<p>One MCP server has to expose a large and growing tool surface without loading every addon&#x27;s cost into every session.</p>
+<p>Addon drift — an addon enabled but not loadable, or a tool count over the model&#x27;s cap — had to be measurable rather than assumed, because the failure looks like a normal working server until a tool is missing.</p>
+<h2><span class="num">02</span>What I built</h2>
+<p>Per-addon directories behind a lazy-load proxy, an enabled-addons manifest, a router that mounts addons conditionally, and a test suite per addon family.</p>
+<p>Inventory, tool-count ranking and budget checks turn the surface into numbers: what is enabled, what actually loaded, and how far the total sits from the cap.</p>
+<div class="panel"><h3>Evidence</h3><ul>
+<li><code>universal-mcp/</code><br>app.py, addons_manager.py, lazy-load proxy</li>
+<li><code>universal-mcp/Tools/</code><br>~95 addon directories; enabled_addons.txt lists 30</li>
+<li><code>universal-mcp/tests/</code><br>10 modules including self-admin, vault search, knowledge graph</li>
+<li><code>Docs/changelog.md</code><br>tool-budget ceiling measured, then resolved against the live server</li>
+</ul></div>
+</div>
+<nav class="next-prev"><a href="../mcp20-audit/"><span class="label">Previous</span>&larr; MCP 2.0 migration audit</a><span class="spacer"></span><a href="../heartbeat/"><span class="label">Next</span>Autonomous heartbeat &rarr;</a></nav>
+</article>
+</main>
+<footer>
+<p>Built and maintained by <a href="https://eviethegremlinn.com">Evie</a> &middot; <a href="https://github.com/ZaviiNet/evie-site">source</a></p>
+</footer>
+</body>
+</html>

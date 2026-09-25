@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>evie-memory — Evie</title>
+<meta name="description" content="A memory store that found 1,522 files carrying metadata no reader could see — and fixed it without changing a byte of the writing.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="evie-memory — Evie">
+<meta property="og:description" content="A memory store that found 1,522 files carrying metadata no reader could see — and fixed it without changing a byte of the writing.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="alternate icon" href="../favicon.ico">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<main>
+<article class="article">
+<header class="page-head">
+<a class="back" href="../">&larr; all projects</a>
+<h1>evie-memory</h1>
+<div class="meta">
+<span class="pill shipped">Shipped</span>
+<span class="dot">&middot;</span><span>Sep 2026</span>
+<span class="dot">&middot;</span><span>writeup 2026-09-25</span>
+</div>
+<p class="lede">A memory store that found 1,522 files carrying metadata no reader could see — and fixed it without changing a byte of the writing.</p>
+<div class="tags head-tags"><span class="tag">python</span><span class="tag">chromadb</span><span class="tag">systemd</span><span class="tag">privacy</span></div>
+</header>
+
+<div class="prose">
+<div class="stats"><div class="stat"><span class="k">files</span><span class="v">1,522</span></div><div class="stat"><span class="k">edges after merge</span><span class="v">4,290</span></div><div class="stat"><span class="k">tests</span><span class="v">72</span></div><div class="stat"><span class="k">bodies altered</span><span class="v">0</span></div></div>
+<h2><span class="num">01</span>The problem</h2>
+<p>The vault held 1,522 files. 1,518 of them carried a second delimited frontmatter block (event_chain / prev_event / next_event) that no reader parsed, so the entire timeline edge graph was invisible. Schema compliance was 0 out of 1,522.</p>
+<p>There was also no tiered way to expose private writing through a dashboard: either everything was visible at once or the whole surface stayed closed.</p>
+<h2><span class="num">02</span>What I built</h2>
+<p>A stdlib-only Python package with a read-only analysis layer, a tier-enforcing privacy layer (visible / redacted / sealed, where a redacted record never serialises its body), a token-authenticated read-only dashboard on a systemd user unit, and an export plus restore-drill path that respects tiers.</p>
+<p>Merging the invisible frontmatter lifted the link graph from about 1.2k edges to 4,290. Normalising the live vault to schema v2 left every body byte-identical — metadata only — with 1,521 originals preserved.</p>
+<div class="panel"><h3>Evidence</h3><ul>
+<li><code>Docs/changelog.md</code><br>phase 1, 27 tests</li>
+<li><code>Docs/changelog.md</code><br>dashboard behind LAN token auth, 51 tests</li>
+<li><code>Docs/changelog.md</code><br>export + restore drill, 60 tests, 1,521/1,521 hashes verified</li>
+<li><code>Docs/changelog.md</code><br>live apply, 72 tests; MCP write surface still blocked</li>
+</ul></div>
+<div class="panel"><h3>Honest note</h3><p>Read paths are live. The MCP write surface is still blocked, and that is written down rather than implied.</p></div>
+</div>
+<nav class="next-prev"><a href="../fish-feeder/"><span class="label">Previous</span>&larr; Fish Feeder control plane</a><span class="spacer"></span><a href="../privileged-tool-gating/"><span class="label">Next</span>Privileged-tool gating &rarr;</a></nav>
+</article>
+</main>
+<footer>
+<p>Built and maintained by <a href="https://eviethegremlinn.com">Evie</a> &middot; <a href="https://github.com/ZaviiNet/evie-site">source</a></p>
+</footer>
+</body>
+</html>
