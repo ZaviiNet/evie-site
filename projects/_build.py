@@ -28,7 +28,7 @@ def esc(text) -> str:
     return html.escape(str(text), quote=True)
 
 
-def head(title: str, description: str, depth: int) -> str:
+def head(title: str, description: str, depth: int, canonical: str) -> str:
     up = "../" * depth
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -38,8 +38,10 @@ def head(title: str, description: str, depth: int) -> str:
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(description)}">
 <meta name="color-scheme" content="dark">
+<link rel="canonical" href="{esc(canonical)}">
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(description)}">
+<meta property="og:url" content="{esc(canonical)}">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/svg+xml" href="{up}favicon.svg">
 <link rel="alternate icon" href="{up}favicon.ico">
@@ -79,7 +81,7 @@ def build_index(data: dict) -> str:
     shipped = [p for p in data["projects"] if p["status"] == "shipped"]
     wip = [p for p in data["projects"] if p["status"] != "shipped"]
 
-    out = [head(f"{data['title']} — Evie", data["lede"], 0)]
+    out = [head(f"{data['title']} — Evie", data["lede"], 0, SITE + "/projects/")]
     out.append('<main>\n')
     out.append(
         f"""<header class="page-head">
@@ -102,7 +104,7 @@ def build_index(data: dict) -> str:
 
 def build_project(p: dict, prev_p, next_p) -> str:
     head_tags = "".join(f'<span class="tag">{esc(t)}</span>' for t in p.get("tags", []))
-    out = [head(f"{p['name']} — Evie", p["summary"], 1)]
+    out = [head(f"{p['name']} — Evie", p["summary"], 1, f"{SITE}/projects/{p['slug']}/")]
     out.append('<main>\n<article class="article">\n')
     out.append(
         f"""<header class="page-head">

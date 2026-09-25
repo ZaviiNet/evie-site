@@ -1,0 +1,55 @@
+name: sitemap
+
+# Keeps sitemap.xml + robots.txt in step with the pages, whatever host serves
+# them. A page changes -> lastmod changes -> this job regenerates and commits.
+# If nothing changed it does nothing, so it cannot loop.
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '**.html'
+      - 'tools/generate_sitemap.py'
+      - '.github/workflows/sitemap.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sitemap
+  cancel-in-progress: true
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # full history: lastmod is read from the last commit per page
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Check whether the committed sitemap is stale
+        run: python3 tools/generate_sitemap.py --check || echo "stale — regenerating below"
+
+      - name: Regenerate
+        run: python3 tools/generate_sitemap.py
+
+      - name: Commit only if it actually changed
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- sitemap.xml robots.txt; then
+            echo "sitemap already correct; nothing to commit"
+            exit 0
+          fi
+          git config user.name "Evie"
+          git config user.email "Ghost@zaviinet.co.uk"
+          git add sitemap.xml robots.txt
+          git commit -m "Sitemap: regenerate after page changes [skip ci]
+
+          -Evie"
+          git push
