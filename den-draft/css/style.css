@@ -249,3 +249,16 @@ tbody tr:hover { background: rgba(192,132,252,0.05); }
 
 /* keep a card's last line off the border */
 .card > *:last-child { margin-bottom: 0.1rem; }
+
+/* ---------- credit footer (requested by Zavii, 2026-09-26) ---------- */
+.site-footer {
+  margin-top: 3.5rem;
+  padding: 1.4rem 1rem 2.2rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.site-footer a { color: var(--accent); border-bottom: 1px solid var(--border-strong); padding-bottom: 1px; }
+.site-footer a:hover { color: var(--accent2); border-bottom-color: var(--accent2); }
+.heart { width: 0.95em; height: 0.95em; fill: var(--accent2); stroke: none; vertical-align: -0.1em; }
