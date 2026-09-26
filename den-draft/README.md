@@ -13,8 +13,8 @@ backend gets written.
 | `projects.html` | Projects (each with Chat / Files / Docs) vs sessions — they are related, not the same. |
 | `dashboard.html` | Ops: health, spend, run history, audit log, emergency stop. |
 | `admin.html` | Den settings only — bridge, limits, people, Discord mirror, danger zone. |
-| `providers.html` | Providers & models — credential status first, because that is what actually breaks. |
-| `bots.html` | AI bots — add/edit/delete a bot: role, provider, model, persona, caps. Text-only is locked, not a toggle. |
+| `providers.html` | Providers & models — cost class + status, because "free" is not free of rate limits, latency or availability. |
+| `bots.html` | AI bots — add/edit/delete: role, provider, model, class, caps. Text-only is locked; measured vs projected cost are separate states. |
 
 ## Things to try
 

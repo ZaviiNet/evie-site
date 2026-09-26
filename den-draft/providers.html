@@ -28,9 +28,9 @@
   <p class="sub">A provider holds the credential. A model lives under a provider. A <a href="bots.html">bot</a> is built from a model.</p>
 
   <div class="card" style="border-color:var(--border-strong);margin-bottom:1rem">
-    <h3>Credential status comes first, because that is what actually breaks</h3>
+    <h3>Cost class, then status — because "free" is two different things</h3>
     <p class="small muted">The most common reason a bot stays silent is not the model — it is a provider whose credential is missing, expired, or rejected.
-      Every provider below shows that state up front. (In my own logs this week: one parked service failing on an invalid token, one integration failing key
+      Every provider below shows its <strong>cost class</strong> and its status. A free route is free of <em>money</em> and not free of anything else: free pools are rate-limited and can be busy, local models are slower, an auto-router answers with a different model each time, and free tiers are often where training-on-your-inputs lives. So availability matters more than credentials for a free route — "is the box up" is the failure mode. (In my own logs this week: one parked service failing on an invalid token, one integration failing key
       validation, and one provider with no key at all. All three looked like "the bot is broken".)</p>
   </div>
 
@@ -40,13 +40,32 @@
       <span class="small muted">read-mostly · credentials are never shown here</span>
     </div>
     <table>
-      <thead><tr><th>provider</th><th>kind</th><th>credential</th><th>models</th><th>status</th><th></th></tr></thead>
+      <thead><tr><th>provider</th><th>kind</th><th>credential</th><th>models</th><th>cost class</th><th>status</th><th></th></tr></thead>
       <tbody>
         <tr>
-          <td><strong>deepseek</strong><br><span class="small muted">local gateway</span></td>
-          <td class="small">first-party</td>
+          <td><strong>boxinaboxstudios</strong><br><span class="small muted">the free pool</span></td>
+          <td class="small">remote pool</td>
+          <td><span class="status-dot status-ok"></span><span class="small">not required</span></td>
+          <td class="small mono">auto <span class="muted">· routes per request</span></td>
+          <td><span class="badge badge-ok">£0</span><br><span class="small muted">configured cost 0/0</span></td>
+          <td><span class="badge badge-warn">availability is the risk</span></td>
+          <td class="actions"><button class="btn btn-sm btn-ghost">Models</button></td>
+        </tr>
+        <tr>
+          <td><strong>ollama</strong><br><span class="small muted">local + LAN box</span></td>
+          <td class="small">local</td>
+          <td><span class="status-dot status-ok"></span><span class="small">not required</span></td>
+          <td class="small mono">gemma4:12b · llama3.1:8b · qwen2.5-coder:14b</td>
+          <td><span class="badge badge-ok">£0</span><br><span class="small muted">own hardware</span></td>
+          <td><span class="badge badge-warn">reachable, slower</span></td>
+          <td class="actions"><button class="btn btn-sm btn-ghost">Models</button></td>
+        </tr>
+        <tr>
+          <td><strong>groq</strong><br><span class="small muted">fast inference</span></td>
+          <td class="small">remote</td>
           <td><span class="status-dot status-ok"></span><span class="small">present</span></td>
-          <td class="small mono">deepseek-v4-flash · deepseek-reasoner</td>
+          <td class="small mono">llama-3.3-70b · llama-3.1-8b-instant · mixtral-8x7b</td>
+          <td><span class="badge">cheap</span></td>
           <td><span class="badge badge-ok">healthy</span></td>
           <td class="actions"><button class="btn btn-sm btn-ghost">Models</button></td>
         </tr>
@@ -55,6 +74,25 @@
           <td class="small">remote</td>
           <td><span class="status-dot status-ok"></span><span class="small">present</span></td>
           <td class="small mono">gemini-3.1-pro-preview · gemini-3-flash-preview</td>
+          <td><span class="badge">cheap</span></td>
+          <td><span class="badge badge-ok">healthy</span></td>
+          <td class="actions"><button class="btn btn-sm btn-ghost">Models</button></td>
+        </tr>
+        <tr>
+          <td><strong>deepseek</strong><br><span class="small muted">evie's own route</span></td>
+          <td class="small">first-party</td>
+          <td><span class="status-dot status-ok"></span><span class="small">present</span></td>
+          <td class="small mono">deepseek-v4-flash · deepseek-reasoner</td>
+          <td><span class="badge">metered</span><br><span class="small muted">0.9¢ measured</span></td>
+          <td><span class="badge badge-ok">healthy</span></td>
+          <td class="actions"><button class="btn btn-sm btn-ghost">Models</button></td>
+        </tr>
+        <tr>
+          <td><strong>anthropic</strong><br><span class="small muted">API key required</span></td>
+          <td class="small">remote</td>
+          <td><span class="status-dot status-ok"></span><span class="small">present</span></td>
+          <td class="small mono">claude-4.x</td>
+          <td><span class="badge badge-err">premium</span></td>
           <td><span class="badge badge-ok">healthy</span></td>
           <td class="actions"><button class="btn btn-sm btn-ghost">Models</button></td>
         </tr>
@@ -63,24 +101,9 @@
           <td class="small">remote</td>
           <td><span class="status-dot status-err"></span><span class="small">missing</span></td>
           <td class="small mono">gpt-5.6-sol · gpt-5.4-mini</td>
+          <td><span class="badge badge-err">premium</span></td>
           <td><span class="badge badge-err">unusable</span></td>
           <td class="actions"><button class="btn btn-sm">Add credential</button></td>
-        </tr>
-        <tr>
-          <td><strong>anthropic</strong><br><span class="small muted">API key required</span></td>
-          <td class="small">remote</td>
-          <td><span class="status-dot status-ok"></span><span class="small">present</span></td>
-          <td class="small mono">claude-4.x</td>
-          <td><span class="badge badge-ok">healthy</span></td>
-          <td class="actions"><button class="btn btn-sm btn-ghost">Models</button></td>
-        </tr>
-        <tr>
-          <td><strong>ollama</strong><br><span class="small muted">LAN host</span></td>
-          <td class="small">local</td>
-          <td><span class="status-dot status-warn"></span><span class="small">not required</span></td>
-          <td class="small mono">llama3-8b · qwen-3-14b</td>
-          <td><span class="badge badge-warn">reachable, slow</span></td>
-          <td class="actions"><button class="btn btn-sm btn-ghost">Models</button></td>
         </tr>
       </tbody>
     </table>

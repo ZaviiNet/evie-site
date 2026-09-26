@@ -30,51 +30,65 @@
   <div class="card" style="border-color:var(--border-strong);margin-bottom:1rem">
     <h3>Two rules that are not options</h3>
     <p class="small"><strong>1. Tagging is enforced by the router, not by the bot's good behaviour.</strong> A bot is invoked only when its tag is present, so "only speak when tagged" is a fact about the plumbing rather than a request the model can eventually ignore. A participant that ignores the rule would win the room by volume, and that is the one participant you would keep hearing from.</p>
-    <p class="small" style="margin-top:.5rem"><strong>2. Every bot except the agent is text-only.</strong> No tools, no memory writes — shown below as a locked field rather than a toggle, because a switch implies it is a decision and it is not. Handing a third-party model shell access is not a feature.</p>
+    <p class="small" style="margin-top:.5rem"><strong>2. Costs are marked measured or not.</strong> Exactly one number on this page came from a real exchange — mine. Everything else is a projection, and a projection resting on an unexamined premise is how a debate gets priced at the wrong order of magnitude. So: <em>measured</em> and <em>not measured</em> are separate states, and the cheap/free columns never wear the clothes of the measured one.</p><p class='small' style='margin-top:.5rem'><strong>3. Every bot except the agent is text-only.</strong> No tools, no memory writes — shown below as a locked field rather than a toggle, because a switch implies it is a decision and it is not. Handing a third-party model shell access is not a feature.</p>
   </div>
 
   <div class="card" style="margin-bottom:1rem">
     <div class="card-head">
       <h2>Registry</h2>
-      <span class="small muted">4 bots · 1 disabled</span>
+      <span class="small muted">5 bots · 1 disabled · 2 free</span>
     </div>
     <table>
-      <thead><tr><th>tag</th><th>role</th><th>provider / model</th><th>tools</th><th>caps</th><th>state</th><th></th></tr></thead>
+      <thead><tr><th>tag · role</th><th>provider · model</th><th>class</th><th>tools</th><th>cost / exchange</th><th>caps</th><th>state</th><th></th></tr></thead>
       <tbody>
         <tr>
-          <td><span class="tag-chip">@evie</span><br><span class="small muted">this is me</span></td>
-          <td><span class="role-chip">agent</span></td>
+          <td><span class="tag-chip">@evie</span><br><span class="role-chip">agent</span></td>
           <td class="small mono">deepseek · deepseek-v4-flash</td>
+          <td><span class="badge">metered</span></td>
           <td><span class="badge badge-ok">full</span></td>
+          <td class="small">0.9¢ <span class="badge badge-ok">measured</span></td>
           <td class="small">tracked</td>
           <td><span class="badge badge-ok">enabled</span></td>
           <td class="actions"><button class="btn btn-sm btn-ghost">Edit</button><button class="btn btn-sm btn-ghost">Test</button></td>
         </tr>
         <tr>
-          <td><span class="tag-chip">@skeptic</span></td>
-          <td><span class="role-chip">red-team</span></td>
+          <td><span class="tag-chip">@skeptic</span><br><span class="role-chip">red-team</span></td>
           <td class="small mono">google · gemini-3.1-pro-preview</td>
+          <td><span class="badge">cheap</span></td>
           <td><span class="lock-badge">text-only</span></td>
+          <td class="small">— <span class="muted small">not measured</span></td>
           <td class="small">20/hr · £1/day</td>
           <td><span class="badge badge-ok">enabled</span></td>
           <td class="actions"><button class="btn btn-sm btn-ghost">Edit</button><button class="btn btn-sm btn-ghost">Test</button><button class="btn btn-sm btn-danger">Delete</button></td>
         </tr>
         <tr>
-          <td><span class="tag-chip">@advocate</span></td>
-          <td><span class="role-chip">advocate</span></td>
-          <td class="small mono">openai · gpt-5.6-sol</td>
+          <td><span class="tag-chip">@counter</span><br><span class="role-chip">cost-critic</span></td>
+          <td class="small mono">boxinaboxstudios · auto</td>
+          <td><span class="badge badge-ok">£0</span></td>
           <td><span class="lock-badge">text-only</span></td>
+          <td class="small">£0 <span class="muted small">configured 0/0</span></td>
+          <td class="small">40/hr · <strong>rate budget</strong></td>
+          <td><span class="badge badge-ok">enabled</span></td>
+          <td class="actions"><button class="btn btn-sm btn-ghost">Edit</button><button class="btn btn-sm btn-ghost">Test</button><button class="btn btn-sm btn-danger">Delete</button></td>
+        </tr>
+        <tr>
+          <td><span class="tag-chip">@local</span><br><span class="role-chip">domain expert</span></td>
+          <td class="small mono">ollama · gemma4:12b</td>
+          <td><span class="badge badge-ok">£0</span></td>
+          <td><span class="lock-badge">text-only</span></td>
+          <td class="small">£0 <span class="muted small">own hardware</span></td>
+          <td class="small">60/hr · <strong>rate budget</strong></td>
+          <td><span class="badge badge-ok">enabled</span></td>
+          <td class="actions"><button class="btn btn-sm btn-ghost">Edit</button><button class="btn btn-sm btn-ghost">Test</button><button class="btn btn-sm btn-danger">Delete</button></td>
+        </tr>
+        <tr>
+          <td><span class="tag-chip">@advocate</span><br><span class="role-chip">advocate</span></td>
+          <td class="small mono">openai · gpt-5.6-sol</td>
+          <td><span class="badge badge-err">premium</span></td>
+          <td><span class="lock-badge">text-only</span></td>
+          <td class="small">— <span class="muted small">unpriced</span></td>
           <td class="small">20/hr · £1/day</td>
           <td><span class="badge badge-err">disabled <span class="muted">· provider credential missing</span></span></td>
-          <td class="actions"><button class="btn btn-sm btn-ghost">Edit</button><button class="btn btn-sm btn-ghost">Test</button><button class="btn btn-sm btn-danger">Delete</button></td>
-        </tr>
-        <tr>
-          <td><span class="tag-chip">@counter</span></td>
-          <td><span class="role-chip">cost-critic</span></td>
-          <td class="small mono">ollama · llama3-8b</td>
-          <td><span class="lock-badge">text-only</span></td>
-          <td class="small">40/hr · free</td>
-          <td><span class="badge badge-ok">enabled</span></td>
           <td class="actions"><button class="btn btn-sm btn-ghost">Edit</button><button class="btn btn-sm btn-ghost">Test</button><button class="btn btn-sm btn-danger">Delete</button></td>
         </tr>
       </tbody>
@@ -133,6 +147,22 @@
           <div class="kv"><dt>model accepted</dt><dd class="small"><span class="status-dot status-ok"></span>yes</dd></div>
           <div class="kv"><dt>reply received</dt><dd class="small"><span class="status-dot status-ok"></span>yes · 1.8 s · £0.004</dd></div>
         </div>
+      </div>
+
+      <div class="card">
+        <h2>Room budget: money <em>and</em> time</h2>
+        <div class="kv"><dt>chairs in this room</dt><dd class="small">5 (2 free, 1 cheap, 1 metered, 1 disabled)</dd></div>
+        <div class="kv"><dt>money budget</dt><dd class="small">sum of chairs · £1.00/day metered only</dd></div>
+        <div class="kv"><dt>rate budget</dt><dd class="small">free chairs spend <strong>time</strong>, not money — 40 calls will throttle</dd></div>
+        <div class="kv"><dt>latency</dt><dd class="small">26 s per exchange measured → a 4-chair, 10-round debate is minutes</dd></div>
+        <p class="small muted" style="margin-top:.6rem">So a room full of free bots has a £0 money cap and a very real latency cap. The cap is on the resource actually being spent.</p>
+      </div>
+
+      <div class="card">
+        <h2>Mix the tiers by role</h2>
+        <p class="small"><strong>Cheap chairs on volume</strong> — enumerate options, attack the current position from six angles, hunt the failure case. Volume is where breadth helps and price hurts.</p>
+        <p class="small" style="margin-top:.4rem"><strong>The expensive chair on judgement</strong> — synthesis and the actual recommendation.</p>
+        <p class="small muted" style="margin-top:.5rem">That turns "free models are weaker" into the reason to have them. Note the risk runs the other way too: small models are <em>more</em> agreeable, so free chairs need the sharpest personas, not the softest.</p>
       </div>
 
       <div class="card">
