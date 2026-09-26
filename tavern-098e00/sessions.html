@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Evie Tavern — sessions</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="prototype-banner"><strong>PROTOTYPE</strong> — the question this page answers: do we want one long-running room, or a room per topic?</div>
+
+<header class="topbar">
+  <div class="brand">Evie <span>Tavern</span></div>
+  <span class="chip">sessions</span>
+  <nav class="nav-links">
+    <a href="room.html">Room</a>
+    <a href="sessions.html">Sessions</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="admin.html">Admin</a>
+    <a href="index.html">Sign out</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <div class="spread" style="margin-bottom:1rem">
+    <div>
+      <h1>Sessions</h1>
+      <p class="sub" style="margin-bottom:0">A session is <em>my</em> context. A room is <em>your</em> transcript. They're related, not the same.</p>
+    </div>
+    <button class="btn btn-primary">New session</button>
+  </div>
+
+  <div class="card" style="margin-bottom:1rem">
+    <table>
+      <thead><tr><th>room</th><th>session key</th><th>last activity</th><th>messages</th><th>spend</th><th>state</th><th></th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a href="room.html">Pixel Tavern — dev</a><br><span class="small muted">the main one</span></td>
+          <td class="mono small">hook:tavern-pixel</td>
+          <td class="small">2 m ago</td>
+          <td class="small">41</td>
+          <td class="small">£0.42</td>
+          <td><span class="badge badge-ok">active</span></td>
+          <td><button class="btn btn-sm btn-ghost">Open</button></td>
+        </tr>
+        <tr>
+          <td>Pixel Tavern — art direction</td>
+          <td class="mono small">hook:tavern-art</td>
+          <td class="small">yesterday</td>
+          <td class="small">88</td>
+          <td class="small">£1.10</td>
+          <td><span class="badge">idle</span></td>
+          <td><button class="btn btn-sm btn-ghost">Open</button></td>
+        </tr>
+        <tr>
+          <td>Scratch — API design</td>
+          <td class="mono small">hook:tavern-scratch</td>
+          <td class="small">3 days ago</td>
+          <td class="small">12</td>
+          <td class="small">£0.08</td>
+          <td><span class="badge badge-warn">archived</span></td>
+          <td><button class="btn btn-sm btn-ghost">Restore</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid grid-2">
+    <div class="card">
+      <h2>Why more than one session</h2>
+      <p class="small">A long-lived session accumulates context and eventually has to be windowed hard. Starting a fresh one per topic keeps my working set small and makes the transcript's history honest — you can see exactly which conversation a decision came from.</p>
+      <p class="small muted">Cost: things decided in one session aren't in the next one unless they're written down. That's what the persistent memory files are for.</p>
+    </div>
+    <div class="card">
+      <h2>Commands that act on sessions</h2>
+      <dl>
+        <div class="kv"><dt class="mono">/new</dt><dd class="small">fresh agent context for this room</dd></div>
+        <div class="kv"><dt class="mono">/clear</dt><dd class="small">clear the visible transcript only</dd></div>
+        <div class="kv"><dt class="mono">/export</dt><dd class="small">transcript + artifacts, for the record</dd></div>
+        <div class="kv"><dt class="mono">/stop</dt><dd class="small">owner only — abort the in-flight run</dd></div>
+      </dl>
+      <p class="small muted" style="margin-top:.6rem">Clearing what you <em>see</em> and resetting what I <em>remember</em> are different operations. Conflating them is how everyone ends up confused about what was said.</p>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

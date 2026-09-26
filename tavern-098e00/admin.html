@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Evie Tavern — admin</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="prototype-banner"><strong>PROTOTYPE</strong> — every field is inert. Judge whether these are the right knobs, in the right places, with the right warnings.</div>
+
+<header class="topbar">
+  <div class="brand">Evie <span>Tavern</span></div>
+  <span class="chip">admin</span>
+  <nav class="nav-links">
+    <a href="room.html">Room</a>
+    <a href="sessions.html">Sessions</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="admin.html">Admin</a>
+    <a href="index.html">Sign out</a>
+  </nav>
+</header>
+
+<div class="wrap wrap-narrow">
+  <h1>Admin</h1>
+  <p class="sub">Settings for the tavern. Not for Evie.</p>
+
+  <div class="card" style="border-color:var(--border-strong);margin-bottom:1rem">
+    <h3>Scope boundary — read this first</h3>
+    <p class="small">This page configures <strong>the tavern</strong>: how it reaches the agent, who may use it, and what it costs.
+      It deliberately <strong>cannot</strong> change Evie's tools, prompts, or policies. Those stay with the owner, edited by hand,
+      because an external web surface that can reconfigure the agent is a privilege-escalation path in a nice font.</p>
+  </div>
+
+  <h2>Bridge</h2>
+  <div class="card" style="margin-bottom:1rem">
+    <div class="field">
+      <label class="label" for="endpoint">Gateway hook endpoint</label>
+      <input class="input mono" id="endpoint" value="https://gateway.internal/hooks">
+      <div class="hint">Ingress stays on a dedicated subpath (not <span class="mono">/</span>).</div>
+    </div>
+    <div class="field">
+      <label class="label" for="token">Hook token</label>
+      <div class="flex">
+        <input class="input mono" id="token" value="••••••••••••••••••••" readonly>
+        <button class="btn btn-ghost">Rotate</button>
+      </div>
+      <div class="hint">Dedicated to hooks — never the gateway's own auth secret. Sent as a header; query-string tokens are refused.</div>
+    </div>
+    <div class="grid grid-2">
+      <div class="field">
+        <label class="label" for="owner-agent">Owner agent id</label>
+        <input class="input mono" id="owner-agent" value="evie-full">
+        <div class="hint">Full toolset. Used only for owner-triggered runs.</div>
+      </div>
+      <div class="field">
+        <label class="label" for="guest-agent">Guest agent id</label>
+        <input class="input mono" id="guest-agent" value="evie-guest">
+        <div class="hint">Restricted toolset — no shell, no memory writes. Enforced in the agent's own config, not by asking nicely.</div>
+      </div>
+      <div class="field">
+        <label class="label" for="session-key">Session key prefix</label>
+        <input class="input mono" id="session-key" value="hook:tavern-">
+        <div class="hint">Every session key is bounded by this prefix so a caller can't address someone else's session.</div>
+      </div>
+      <div class="field">
+        <label class="label" for="queue-mode">Queue mode</label>
+        <select id="queue-mode">
+          <option>followup — queue behind the current run</option>
+          <option>interrupt — abort the current run and take over</option>
+          <option>collect — gather and process together</option>
+          <option>steer — inject into the active run</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <h2>Limits</h2>
+  <div class="card" style="margin-bottom:1rem">
+    <div class="grid grid-2">
+      <div class="field">
+        <label class="label" for="rate">Mentions per user per hour</label>
+        <input class="input" id="rate" value="20">
+      </div>
+      <div class="field">
+        <label class="label" for="cap">Daily spend cap</label>
+        <input class="input" id="cap" value="£2.00">
+        <div class="hint">Hard stop. The room keeps working; Evie simply stops answering.</div>
+      </div>
+      <div class="field">
+        <label class="label" for="maxfile">Max upload size</label>
+        <input class="input" id="maxfile" value="16 MiB">
+        <div class="hint">Matches the agent's own ingress limit. Staged privately with a 24 h TTL.</div>
+      </div>
+      <div class="field">
+        <label class="label" for="types">Allowed file types</label>
+        <input class="input mono" id="types" value="png, jpg, webp, pdf, md, txt, sql, json">
+      </div>
+    </div>
+  </div>
+
+  <h2>People</h2>
+  <div class="card" style="margin-bottom:1rem">
+    <table>
+      <thead><tr><th>who</th><th>role</th><th>agent used</th><th>can</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>Zavii</td><td><span class="badge">owner</span></td><td class="mono small">evie-full</td><td class="small">everything, including /stop</td><td><span class="muted small">—</span></td></tr>
+        <tr><td>GT</td><td><span class="badge">guest</span></td><td class="mono small">evie-guest</td><td class="small">talk, upload, mention</td><td><button class="btn btn-sm btn-ghost">Edit</button></td></tr>
+      </tbody>
+    </table>
+    <div class="flex" style="margin-top:.8rem">
+      <input class="input" placeholder="email to invite (no public signup)" style="max-width:320px">
+      <button class="btn">Invite</button>
+    </div>
+  </div>
+
+  <h2>Discord mirror</h2>
+  <div class="card" style="margin-bottom:1rem">
+    <div class="flex" style="justify-content:space-between">
+      <div>
+        <div><strong>Mirror the room into a Discord channel</strong></div>
+        <div class="small muted">One-way only: an incoming webhook can post, but it cannot read replies. Two-way would need a bot or an interactions endpoint.</div>
+      </div>
+      <label class="small"><input type="checkbox"> enabled</label>
+    </div>
+    <div class="field" style="margin-top:.9rem">
+      <label class="label" for="wh">Discord webhook URL</label>
+      <input class="input mono" id="wh" placeholder="https://discord.com/api/webhooks/…">
+      <div class="hint">Outbound destinations are owner-configured only, and the server's egress keeps private/internal targets blocked by default — otherwise this box is a way to make my server probe your LAN.</div>
+    </div>
+  </div>
+
+  <h2>Danger zone</h2>
+  <div class="card" style="border-color:rgba(251,113,133,0.35)">
+    <div class="stack">
+      <div class="spread"><span>Disable the agent for this room</span><button class="btn btn-danger">Disable</button></div>
+      <div class="spread"><span>Rotate hook token</span><button class="btn">Rotate</button></div>
+      <div class="spread"><span>Delete this room and its transcript</span><button class="btn btn-danger">Delete</button></div>
+    </div>
+    <p class="small muted" style="margin-top:.8rem">Disabling the agent leaves the room usable — you two can still talk. That's the point: the kill switch must not take away the conversation.</p>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

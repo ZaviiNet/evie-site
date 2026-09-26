@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Evie Tavern — Pixel Tavern (dev)</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="prototype-banner"><strong>PROTOTYPE</strong> — try typing: a normal message stays between you two, <span class="mono">@evie</span> gets a reply, and <span class="mono">/</span> opens the command list.</div>
+
+<header class="topbar">
+  <div class="brand">Evie <span>Tavern</span></div>
+  <span class="chip">room: pixel-tavern · dev</span>
+  <nav class="nav-links">
+    <a href="room.html">Room</a>
+    <a href="sessions.html">Sessions</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="admin.html">Admin</a>
+    <a href="index.html">Sign out</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <div class="spread" style="margin-bottom:1rem">
+    <div class="toolbar-meta">
+      <span class="badge badge-ok">Evie listening</span>
+      <span class="badge">Zavii</span>
+      <span class="badge">GT</span>
+      <span class="small muted" id="role-indicator">previewing as Zavii (owner)</span>
+    </div>
+    <div class="flex">
+      <span class="chip mono">hook:tavern-pixel</span>
+      <button class="btn btn-sm btn-ghost" data-cmd="/new">New session</button>
+      <button class="btn btn-sm btn-danger" data-danger>Stop run</button>
+    </div>
+  </div>
+
+  <div class="room-shell">
+    <!-- ============ transcript ============ -->
+    <div class="card" style="padding:0">
+      <div class="transcript" id="transcript">
+        <div class="msg msg-system"><div class="body">Session started · hook:tavern-pixel · queue mode: followup</div></div>
+
+        <div class="msg msg-owner">
+          <div class="avatar">Z</div>
+          <div>
+            <div class="msg-head"><span class="msg-name">Zavii</span><span class="msg-time">10:02</span></div>
+            <div class="msg-body">Right, let's actually scope Pixel Tavern today. I want the tavern *room* working before we touch the game.</div>
+          </div>
+        </div>
+
+        <div class="msg msg-guest">
+          <div class="avatar">G</div>
+          <div>
+            <div class="msg-head"><span class="msg-name">GT</span><span class="msg-time">10:03</span></div>
+            <div class="msg-body">Agreed. I've got a rough schema for rooms + messages if we need it — uploading it now.</div>
+            <div style="margin-top:.35rem"><span class="file-chip"><svg class="icon" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg> schema-draft.sql <span class="muted">· uploaded by gt</span></span></div>
+          </div>
+        </div>
+
+        <div class="msg msg-owner">
+          <div class="avatar">Z</div>
+          <div>
+            <div class="msg-head"><span class="msg-name">Zavii</span><span class="msg-time">10:04</span></div>
+            <div class="msg-body">GT — do we even need Postgres on day one, or is the JSONL log enough until it isn't?</div>
+          </div>
+        </div>
+
+        <div class="msg msg-guest">
+          <div class="avatar">G</div>
+          <div>
+            <div class="msg-head"><span class="msg-name">GT</span><span class="msg-time">10:05</span></div>
+            <div class="msg-body"><span class="mention">@evie</span> can you look at the schema and tell us whether the foreign keys actually hold up?</div>
+          </div>
+        </div>
+
+        <div class="msg msg-agent">
+          <div class="avatar">E</div>
+          <div>
+            <div class="msg-head"><span class="msg-name">Evie</span><span class="msg-time">10:05</span></div>
+            <div class="msg-body">Two problems, one of them structural: <span class="mono">messages.room_id</span> has no FK, so an orphan row is possible; and <span class="mono">attachments</span> points at a storage key with no uploader recorded — which matters, because provenance is what tells me which tool policy a run should use.
+
+Also, since GT uploaded it: I'm reading this under the guest tool policy. If you want me summarising guest files with a shell available, say so and I'll show you what that costs us in blast radius.</div>
+          </div>
+        </div>
+
+        <div class="msg msg-system"><div class="body">3 messages read as context · 1 mention answered</div></div>
+      </div>
+
+      <div class="typing" id="typing" style="display:none">
+        <span class="avatar" style="width:22px;height:22px;font-size:.65rem">E</span>
+        <span>Evie is reading…</span>
+        <span class="dots"><span>·</span><span>·</span><span>·</span></span>
+      </div>
+
+      <div class="composer">
+        <div class="composer-row">
+          <textarea class="input" id="composer-input" placeholder="Message the room. @evie to pull her in. / for commands."></textarea>
+          <button class="btn btn-ghost" data-attach title="Attach a file"><svg class="icon" viewBox="0 0 24 24"><path d="M21 12.5 12.5 21a5 5 0 0 1-7-7l8.5-8.5a3.5 3.5 0 0 1 5 5L10.5 19a2 2 0 0 1-3-3l8-8"/></svg> Attach</button>
+          <button class="btn btn-primary" data-send>Send</button>
+        </div>
+        <div class="composer-meta">
+          <div class="cmd-hints">
+            <button class="btn btn-sm btn-ghost" data-cmd="/new">/new</button>
+            <button class="btn btn-sm btn-ghost" data-cmd="/clear">/clear</button>
+            <button class="btn btn-sm btn-ghost" data-cmd="/plan">/plan</button>
+            <button class="btn btn-sm btn-ghost" data-cmd="/status">/status</button>
+          </div>
+          <span style="margin-left:auto">Enter sends · Shift+Enter newline</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ sidebar ============ -->
+    <aside class="stack">
+      <div class="card">
+        <h2>Context</h2>
+        <div class="meter" id="context-meter"><i style="width:14%"></i></div>
+        <p class="small muted" id="context-label" style="margin-top:.5rem">6 of 50 messages in window</p>
+        <p class="small muted">Older messages summarise into memory; the room transcript is <em>not</em> my session memory and is labelled separately when I'm asked.</p>
+      </div>
+
+      <div class="card">
+        <h2>Session</h2>
+        <dl>
+          <div class="kv"><dt>key</dt><dd class="mono small">hook:tavern-pixel</dd></div>
+          <div class="kv"><dt>queue mode</dt><dd class="small">followup</dd></div>
+          <div class="kv"><dt>owner agent</dt><dd class="mono small">evie-full</dd></div>
+          <div class="kv"><dt>guest agent</dt><dd class="mono small">evie-guest</dd></div>
+          <div class="kv"><dt>spend today</dt><dd class="small">£0.00 <span class="muted">(prototype)</span></dd></div>
+        </dl>
+      </div>
+
+      <div class="card">
+        <h2>Recent files</h2>
+        <div class="stack">
+          <span class="file-chip"><svg class="icon" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg> schema-draft.sql <span class="muted">· gt</span></span>
+          <span class="file-chip"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m4 18 5-5 4 4 3-3 4 4"/></svg> tavern-mockup.png <span class="muted">· zavii</span></span>
+        </div>
+        <p class="small muted" style="margin-top:.6rem">Staged privately, ≤16 MiB, 24 h TTL. I fetch them myself — I never trust a path the web app hands me.</p>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

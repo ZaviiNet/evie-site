@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Evie Tavern — dashboard</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="prototype-banner"><strong>PROTOTYPE</strong> — numbers below are placeholders. The point is to agree what belongs on an ops page at all.</div>
+
+<header class="topbar">
+  <div class="brand">Evie <span>Tavern</span></div>
+  <span class="chip">ops</span>
+  <nav class="nav-links">
+    <a href="room.html">Room</a>
+    <a href="sessions.html">Sessions</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="admin.html">Admin</a>
+    <a href="index.html">Sign out</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <h1>Dashboard</h1>
+  <p class="sub">Is anything broken, is anything expensive, and can I stop it in one click.</p>
+
+  <div class="grid grid-3" style="margin-bottom:1rem">
+    <div class="card">
+      <h3>Tavern server</h3>
+      <p><span class="badge badge-ok">up</span> <span class="muted small">4 h 12 m</span></p>
+      <p class="small muted">2 clients connected · 1 room</p>
+    </div>
+    <div class="card">
+      <h3>Gateway hook</h3>
+      <p><span class="badge badge-ok">reachable</span></p>
+      <p class="small muted">POST /hooks · token ok · 41 ms</p>
+    </div>
+    <div class="card">
+      <h3>Agent</h3>
+      <p><span class="badge badge-warn">idle</span> <span class="small muted">no run in flight</span></p>
+      <p class="small muted">last run 6 m ago · mode followup</p>
+    </div>
+    <div class="card">
+      <h3>Spend today</h3>
+      <p style="font-size:1.5rem">£0.42</p>
+      <div class="meter"><i style="width:21%"></i></div>
+      <p class="small muted" style="margin-top:.4rem">£0.42 of £2.00 daily cap · 34 mentions</p>
+    </div>
+    <div class="card">
+      <h3>Storage</h3>
+      <p style="font-size:1.5rem">118 MB</p>
+      <p class="small muted">staged files, oldest 3 h · TTL 24 h</p>
+    </div>
+    <div class="card">
+      <h3>Errors (24 h)</h3>
+      <p style="font-size:1.5rem">2</p>
+      <p class="small muted">1 refused guest command · 1 upload rejected (size)</p>
+    </div>
+  </div>
+
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="card-head"><h2>Run history</h2><span class="small muted">newest first</span></div>
+      <table>
+        <thead><tr><th>when</th><th>by</th><th>trigger</th><th>ms</th><th>result</th></tr></thead>
+        <tbody>
+          <tr><td class="mono small">12:31</td><td>Zavii</td><td class="mono small">mentions</td><td>4,210</td><td><span class="badge badge-ok">replied</span></td></tr>
+          <tr><td class="mono small">12:29</td><td>GT</td><td class="mono small">mentions</td><td>3,870</td><td><span class="badge badge-ok">replied</span></td></tr>
+          <tr><td class="mono small">12:24</td><td>Zavii</td><td class="mono small">/plan</td><td>6,140</td><td><span class="badge badge-ok">replied</span></td></tr>
+          <tr><td class="mono small">12:19</td><td>GT</td><td class="mono small">/stop</td><td>—</td><td><span class="badge badge-warn">refused (owner-only)</span></td></tr>
+          <tr><td class="mono small">12:11</td><td>Zavii</td><td class="mono small">mentions</td><td>9,050</td><td><span class="badge badge-err">aborted by socket close</span></td></tr>
+        </tbody>
+      </table>
+      <p class="small muted" style="margin-top:.6rem">The aborted run row matters: cancellation calls the agent's abort with the run id, so a closed laptop stops the work rather than just stopping the listening.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Audit log</h2><span class="small muted">append-only</span></div>
+      <pre class="mono small" style="white-space:pre-wrap;line-height:1.5">12:31:04  mention.received  actor=zavii  room=pixel-tavern  run=6f2a…
+12:31:08  agent.replied     actor=evie   run=6f2a…  4,210 ms
+12:29:51  upload.staged     actor=gt     file=schema-draft.sql  prov=guest
+12:29:55  mention.received  actor=gt     policy=guest(no-shell)  run=91bc…
+12:24:10  command.run       actor=zavii  cmd=/plan
+12:19:02  command.refused   actor=gt     cmd=/stop  reason=owner-only
+12:11:33  run.aborted       cause=socket.close  run=77de…</pre>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <div class="card-head">
+      <h2>Controls <span class="small muted">— owner only</span></h2>
+    </div>
+    <div class="flex">
+      <button class="btn btn-danger" data-danger>Emergency stop — kill all runs</button>
+      <button class="btn" onclick="return false">Pause agent (room stays open)</button>
+      <button class="btn btn-ghost" onclick="return false">Export transcript</button>
+    </div>
+    <p class="small muted" style="margin-top:.6rem">Emergency stop is deliberately out-of-band: it lives on the server endpoint, not as a message, because an in-app command is unreachable when the thing that's looping <em>is</em> the app or the model.</p>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
