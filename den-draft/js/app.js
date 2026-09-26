@@ -1,4 +1,4 @@
-/* Evie Tavern — prototype behaviour.
+/* Den — prototype behaviour.
    NON-FUNCTIONAL: no backend, no network calls, nothing persisted except a role hint
    in localStorage so the preview can look different as Zavii vs GT.
    Everything here exists to make the *feel* judgeable. */
@@ -10,14 +10,14 @@
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
 
   /* ---------- role preview (login page + everywhere) ---------- */
-  window.tavernRole = () => localStorage.getItem('tavern-role') || 'zavii';
-  window.setTavernRole = (role) => {
-    localStorage.setItem('tavern-role', role);
+  window.denRole = () => localStorage.getItem('den-role') || 'zavii';
+  window.setDenRole = (role) => {
+    localStorage.setItem('den-role', role);
     location.href = role === 'gt' ? 'room.html' : 'room.html';
   };
 
   document.addEventListener('DOMContentLoaded', () => {
-    const role = window.tavernRole();
+    const role = window.denRole();
     const banner = $('#role-indicator');
     if (banner) banner.textContent = role === 'gt' ? 'GT (guest)' : 'Zavii (owner)';
 
@@ -61,7 +61,7 @@
   function commandAllowed(cmd) {
     const c = COMMANDS.find((x) => x.cmd === cmd);
     if (!c) return true;
-    if (c.ownerOnly && window.tavernRole() === 'gt') return false;
+    if (c.ownerOnly && window.denRole() === 'gt') return false;
     return true;
   }
 
@@ -130,10 +130,10 @@
     setTimeout(() => {
       if (typing) typing.style.display = 'none';
       if (/^\/plan/.test(text)) return appendMessage('evie', REPLIES.plan);
-      if (/^\/new/.test(text)) { appendSystem('/new — fresh agent session started by ' + who(window.tavernRole()).name); return appendMessage('evie', REPLIES.session); }
+      if (/^\/new/.test(text)) { appendSystem('/new — fresh agent session started by ' + who(window.denRole()).name); return appendMessage('evie', REPLIES.session); }
       if (/^\/clear/.test(text)) { $$('#transcript .msg').forEach((m) => { if (!m.classList.contains('msg-system')) m.remove(); }); return appendSystem('/clear — visible transcript cleared (my session memory is untouched)'); }
       if (/^\/stop/.test(text)) {
-        if (window.tavernRole() === 'gt') return appendSystem('Refused: /stop is owner-only. Rejected at the server, not by me.');
+        if (window.denRole() === 'gt') return appendSystem('Refused: /stop is owner-only. Rejected at the server, not by me.');
         return appendSystem('/stop — in-flight run aborted (the real one calls sessions.abort with the runId)');
       }
       if (/^\/status/.test(text)) return appendMessage('evie', 'Session: hook:tavern-pixel · queue mode: followup · spend today: £0.00 (prototype)');
@@ -141,7 +141,7 @@
     }, 900);
   }
 
-  window.tavernSend = function () {
+  window.denSend = function () {
     const box = $('#composer-input');
     if (!box) return;
     const text = box.value.trim();
@@ -154,7 +154,7 @@
       return appendSystem(`Refused: ${cmd} is owner-only — rejected before it ever reached the model.`);
     }
 
-    appendMessage(window.tavernRole(), text);
+    appendMessage(window.denRole(), text);
     box.value = '';
     updateContextMeter();
 
@@ -177,14 +177,14 @@
     const box = $('#composer-input');
     if (box) {
       box.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); window.tavernSend(); }
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); window.denSend(); }
       });
       box.addEventListener('input', () => {
         if (box.value === '/') { buildPalette(); $('#palette').classList.add('open'); }
       });
     }
     $$('[data-cmd]').forEach((b) => b.addEventListener('click', () => insertCommand(b.dataset.cmd)));
-    $$('[data-send]').forEach((b) => b.addEventListener('click', () => window.tavernSend()));
+    $$('[data-send]').forEach((b) => b.addEventListener('click', () => window.denSend()));
     $$('[data-attach]').forEach((b) => b.addEventListener('click', () => {
       appendSystem('File picker would open here — uploaded files are staged (≤16 MiB, private 24 h) and the path is attached to the message for Evie to open.');
     }));

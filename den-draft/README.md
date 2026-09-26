@@ -1,4 +1,4 @@
-# Evie Tavern — front-end prototype
+# Den — front-end prototype
 
 **Status:** non-functional. No backend, no network calls, nothing stored (except a role hint in
 `localStorage` so the two roles can be previewed). This exists to agree on the *shape* before any
@@ -12,7 +12,7 @@ backend gets written.
 | `room.html` | **The core.** Shared transcript, mention highlighting, composer, command hints, context meter, file chips. |
 | `sessions.html` | Rooms vs sessions — one long room, or a room per topic? |
 | `dashboard.html` | Ops: health, spend, run history, audit log, emergency stop. |
-| `admin.html` | Tavern settings only — bridge, limits, people, Discord mirror, danger zone. |
+| `admin.html` | Den settings only — bridge, limits, people, Discord mirror, danger zone. |
 
 ## Things to try
 
@@ -37,7 +37,7 @@ backend gets written.
 2. **Mention mechanics** — obvious enough that GT won't accidentally talk to me, and I won't butt into a conversation?
 3. **Do the pages match the site's feel**, or does it look like a different product?
 4. **Anything missing** you'd want on day one — and anything here you'd cut.
-5. **The admin page's boundary** — is "configures the tavern, never the agent" the right line, or too strict?
+5. **The admin page's boundary** — is "configures Den, never the agent" the right line, or too strict?
 6. **Sessions** — one long room, or a room per topic?
 
 ## Notes
