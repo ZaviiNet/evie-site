@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Den — providers &amp; models</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="prototype-banner"><strong>PROTOTYPE</strong> — inert. Judge the shape: is this the right way to see which providers and models are usable, and which are broken?</div>
+
+<header class="topbar">
+  <div class="brand">Evie's <span>Den</span></div>
+  <span class="chip">admin</span>
+  <nav class="nav-links">
+    <a href="projects.html">Projects</a>
+    <a href="room.html">Room</a>
+    <a href="providers.html">Providers</a>
+    <a href="bots.html">AI Bots</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <h1>Providers &amp; models</h1>
+  <p class="sub">A provider holds the credential. A model lives under a provider. A <a href="bots.html">bot</a> is built from a model.</p>
+
+  <div class="card" style="border-color:var(--border-strong);margin-bottom:1rem">
+    <h3>Credential status comes first, because that is what actually breaks</h3>
+    <p class="small muted">The most common reason a bot stays silent is not the model — it is a provider whose credential is missing, expired, or rejected.
+      Every provider below shows that state up front. (In my own logs this week: one parked service failing on an invalid token, one integration failing key
+      validation, and one provider with no key at all. All three looked like "the bot is broken".)</p>
+  </div>
+
+  <div class="card" style="margin-bottom:1rem">
+    <div class="card-head">
+      <h2>Known providers</h2>
+      <span class="small muted">read-mostly · credentials are never shown here</span>
+    </div>
+    <table>
+      <thead><tr><th>provider</th><th>kind</th><th>credential</th><th>models</th><th>status</th><th></th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>deepseek</strong><br><span class="small muted">local gateway</span></td>
+          <td class="small">first-party</td>
+          <td><span class="status-dot status-ok"></span><span class="small">present</span></td>
+          <td class="small mono">deepseek-v4-flash · deepseek-reasoner</td>
+          <td><span class="badge badge-ok">healthy</span></td>
+          <td class="actions"><button class="btn btn-sm btn-ghost">Models</button></td>
+        </tr>
+        <tr>
+          <td><strong>google</strong><br><span class="small muted">Gemini API</span></td>
+          <td class="small">remote</td>
+          <td><span class="status-dot status-ok"></span><span class="small">present</span></td>
+          <td class="small mono">gemini-3.1-pro-preview · gemini-3-flash-preview</td>
+          <td><span class="badge badge-ok">healthy</span></td>
+          <td class="actions"><button class="btn btn-sm btn-ghost">Models</button></td>
+        </tr>
+        <tr>
+          <td><strong>openai</strong><br><span class="small muted">API key required</span></td>
+          <td class="small">remote</td>
+          <td><span class="status-dot status-err"></span><span class="small">missing</span></td>
+          <td class="small mono">gpt-5.6-sol · gpt-5.4-mini</td>
+          <td><span class="badge badge-err">unusable</span></td>
+          <td class="actions"><button class="btn btn-sm">Add credential</button></td>
+        </tr>
+        <tr>
+          <td><strong>anthropic</strong><br><span class="small muted">API key required</span></td>
+          <td class="small">remote</td>
+          <td><span class="status-dot status-ok"></span><span class="small">present</span></td>
+          <td class="small mono">claude-4.x</td>
+          <td><span class="badge badge-ok">healthy</span></td>
+          <td class="actions"><button class="btn btn-sm btn-ghost">Models</button></td>
+        </tr>
+        <tr>
+          <td><strong>ollama</strong><br><span class="small muted">LAN host</span></td>
+          <td class="small">local</td>
+          <td><span class="status-dot status-warn"></span><span class="small">not required</span></td>
+          <td class="small mono">llama3-8b · qwen-3-14b</td>
+          <td><span class="badge badge-warn">reachable, slow</span></td>
+          <td class="actions"><button class="btn btn-sm btn-ghost">Models</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid grid-2">
+    <div class="card">
+      <h2>Add a provider</h2>
+      <p class="small muted">Adding a provider is a documented path in the agent stack, not something this page invents.
+        The page's job is to <em>see</em> what is known and what is broken — so this form hands off rather than collecting secrets in a browser.</p>
+      <div class="field" style="margin-top:.8rem">
+        <label class="label" for="prov">Provider</label>
+        <select id="prov"><option>deepseek</option><option>google</option><option>openai</option><option>anthropic</option><option>openrouter</option><option>ollama</option><option>other…</option></select>
+      </div>
+      <div class="field">
+        <label class="label" for="apikey">Credential</label>
+        <input class="input mono" id="apikey" placeholder="entered on the host via masked prompt — never in a page" readonly>
+        <div class="hint">Entered through the host's masked-entry flow, never in a page. A credential typed into a web form is a credential in a log somewhere.</div>
+      </div>
+      <button class="btn btn-primary" onclick="return false">Connect provider</button>
+    </div>
+
+    <div class="card">
+      <h2>How a model becomes a bot</h2>
+      <p class="small">Provider → model → <strong>bot</strong>. The bot is what has a tag, a role, a persona and a policy, and the bot is what you mention in a room.</p>
+      <div class="stack" style="margin-top:.6rem">
+        <div class="kv"><dt>provider</dt><dd class="small">deepseek <span class="muted">· holds the credential</span></dd></div>
+        <div class="kv"><dt>model</dt><dd class="small mono">deepseek-v4-flash</dd></div>
+        <div class="kv"><dt>bot</dt><dd class="small"><span class="tag-chip">@evie</span> <span class="role-chip">assistant</span></dd></div>
+      </div>
+      <p class="small muted" style="margin-top:.8rem">Swapping the model under a bot should not change its role, its tag or its history — that is the point of the middle layer.</p>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

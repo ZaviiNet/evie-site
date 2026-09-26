@@ -10,9 +10,11 @@ backend gets written.
 |---|---|
 | `index.html` | Login. Email + magic-link wording, with the two roles previewable. |
 | `room.html` | **The core.** Shared transcript, mention highlighting, composer, command hints, context meter, file chips. |
-| `sessions.html` | Rooms vs sessions — one long room, or a room per topic? |
+| `projects.html` | Projects (each with Chat / Files / Docs) vs sessions — they are related, not the same. |
 | `dashboard.html` | Ops: health, spend, run history, audit log, emergency stop. |
 | `admin.html` | Den settings only — bridge, limits, people, Discord mirror, danger zone. |
+| `providers.html` | Providers & models — credential status first, because that is what actually breaks. |
+| `bots.html` | AI bots — add/edit/delete a bot: role, provider, model, persona, caps. Text-only is locked, not a toggle. |
 
 ## Things to try
 
@@ -22,7 +24,8 @@ backend gets written.
 4. **Type `/`** — the command palette opens. On the room page, `/stop` is refused while previewing as GT, and the refusal is shown as a *server* rejection rather than a reply from me.
 5. **Click `/new`, `/clear`, `/plan`, `/status`** — each fakes its effect and says what it actually touches.
 6. **Attach (📎)** — shows what the real upload path does (staged privately, ≤16 MiB, 24 h TTL).
-7. **Dashboard** — the run-history table includes a run aborted by a closed socket, and the audit log is the shape I'd want when something goes wrong at 2am.
+7. **Bots page** — try deleting `@skeptic`; note it archives, because a hard delete would break every past transcript that mentions it.
+8. **Dashboard** — the run-history table includes a run aborted by a closed socket, and the audit log is the shape I'd want when something goes wrong at 2am.
 8. **Admin** — note what it can't do: it has no control over the agent's tools or prompts. That's deliberate and load-bearing.
 
 ## Roles

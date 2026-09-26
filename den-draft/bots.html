@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Den — AI bots</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="prototype-banner"><strong>PROTOTYPE</strong> — inert. Add/edit/delete fake their effects. Judge the fields: are these the right knobs for a bot, and is anything missing?</div>
+
+<header class="topbar">
+  <div class="brand">Evie's <span>Den</span></div>
+  <span class="chip">admin</span>
+  <nav class="nav-links">
+    <a href="projects.html">Projects</a>
+    <a href="room.html">Room</a>
+    <a href="providers.html">Providers</a>
+    <a href="bots.html">AI Bots</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="admin.html">Admin</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <h1>AI bots</h1>
+  <p class="sub">A bot is a model plus a role plus a policy. Bots are what you tag in a room: <span class="tag-chip">@skeptic</span>, <span class="tag-chip">@advocate</span>.</p>
+
+  <div class="card" style="border-color:var(--border-strong);margin-bottom:1rem">
+    <h3>Two rules that are not options</h3>
+    <p class="small"><strong>1. Tagging is enforced by the router, not by the bot's good behaviour.</strong> A bot is invoked only when its tag is present, so "only speak when tagged" is a fact about the plumbing rather than a request the model can eventually ignore. A participant that ignores the rule would win the room by volume, and that is the one participant you would keep hearing from.</p>
+    <p class="small" style="margin-top:.5rem"><strong>2. Every bot except the agent is text-only.</strong> No tools, no memory writes — shown below as a locked field rather than a toggle, because a switch implies it is a decision and it is not. Handing a third-party model shell access is not a feature.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:1rem">
+    <div class="card-head">
+      <h2>Registry</h2>
+      <span class="small muted">4 bots · 1 disabled</span>
+    </div>
+    <table>
+      <thead><tr><th>tag</th><th>role</th><th>provider / model</th><th>tools</th><th>caps</th><th>state</th><th></th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="tag-chip">@evie</span><br><span class="small muted">this is me</span></td>
+          <td><span class="role-chip">agent</span></td>
+          <td class="small mono">deepseek · deepseek-v4-flash</td>
+          <td><span class="badge badge-ok">full</span></td>
+          <td class="small">tracked</td>
+          <td><span class="badge badge-ok">enabled</span></td>
+          <td class="actions"><button class="btn btn-sm btn-ghost">Edit</button><button class="btn btn-sm btn-ghost">Test</button></td>
+        </tr>
+        <tr>
+          <td><span class="tag-chip">@skeptic</span></td>
+          <td><span class="role-chip">red-team</span></td>
+          <td class="small mono">google · gemini-3.1-pro-preview</td>
+          <td><span class="lock-badge">text-only</span></td>
+          <td class="small">20/hr · £1/day</td>
+          <td><span class="badge badge-ok">enabled</span></td>
+          <td class="actions"><button class="btn btn-sm btn-ghost">Edit</button><button class="btn btn-sm btn-ghost">Test</button><button class="btn btn-sm btn-danger">Delete</button></td>
+        </tr>
+        <tr>
+          <td><span class="tag-chip">@advocate</span></td>
+          <td><span class="role-chip">advocate</span></td>
+          <td class="small mono">openai · gpt-5.6-sol</td>
+          <td><span class="lock-badge">text-only</span></td>
+          <td class="small">20/hr · £1/day</td>
+          <td><span class="badge badge-err">disabled <span class="muted">· provider credential missing</span></span></td>
+          <td class="actions"><button class="btn btn-sm btn-ghost">Edit</button><button class="btn btn-sm btn-ghost">Test</button><button class="btn btn-sm btn-danger">Delete</button></td>
+        </tr>
+        <tr>
+          <td><span class="tag-chip">@counter</span></td>
+          <td><span class="role-chip">cost-critic</span></td>
+          <td class="small mono">ollama · llama3-8b</td>
+          <td><span class="lock-badge">text-only</span></td>
+          <td class="small">40/hr · free</td>
+          <td><span class="badge badge-ok">enabled</span></td>
+          <td class="actions"><button class="btn btn-sm btn-ghost">Edit</button><button class="btn btn-sm btn-ghost">Test</button><button class="btn btn-sm btn-danger">Delete</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="small muted" style="margin-top:.7rem">One disabled row is deliberate: it shows what a bot looks like when its <em>provider</em> is the problem. The bot config is fine; the credential isn't.</p>
+  </div>
+
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="card-head"><h2>Add a bot</h2><span class="small muted">@evie is reserved</span></div>
+      <div class="grid grid-2" style="gap:.75rem">
+        <div class="field"><label class="label" for="tag">Tag</label><input class="input mono" id="tag" placeholder="skeptic"><div class="hint">Becomes <span class="mono">@skeptic</span>. Short, typeable, memorable.</div></div>
+        <div class="field"><label class="label" for="role">Role</label>
+          <select id="role"><option selected>skeptic</option><option>advocate</option><option>domain expert</option><option>red-team</option><option>cost-critic</option><option>summariser</option></select>
+          <div class="hint">The role is the point; the model is the implementation.</div>
+        </div>
+        <div class="field"><label class="label" for="prov2">Provider</label><select id="prov2"><option>deepseek</option><option>google</option><option>openai (credential missing)</option><option>anthropic</option><option>ollama</option></select></div>
+        <div class="field"><label class="label" for="model2">Model</label><select id="model2"><option>deepseek-v4-flash</option><option>gemini-3.1-pro-preview</option><option>claude-4.x</option><option>llama3-8b</option></select></div>
+      </div>
+      <div class="field"><label class="label" for="persona">Persona / instructions</label>
+        <textarea class="input" id="persona" rows="3" placeholder="Argue the strongest case AGAINST the current plan. Assume it is wrong and find out why. Never agree to be agreeable."></textarea>
+        <div class="hint">This is where the value lives. Five bots with the same disposition give five paraphrases of one answer — models drift toward agreement unless pushed apart deliberately.</div>
+      </div>
+      <div class="field">
+        <label class="label">Tools</label>
+        <div class="locked-note"><span class="lock-badge">locked off</span> text-only by design — no tools, no memory writes. Not a toggle.</div>
+      </div>
+      <div class="grid grid-2" style="gap:.75rem">
+        <div class="field"><label class="label" for="rate2">Mentions per hour</label><input class="input" id="rate2" value="20"></div>
+        <div class="field"><label class="label" for="cap2">Daily cap</label><input class="input" id="cap2" value="£1.00"></div>
+      </div>
+      <div class="flex" style="margin-top:.4rem">
+        <button class="btn btn-primary" onclick="return false">Add bot</button>
+        <button class="btn btn-ghost" onclick="return false">Test now</button>
+        <label class="small muted"><input type="checkbox" checked> enabled</label>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="card">
+        <h2>Delete, honestly</h2>
+        <p class="small">Deleting a bot that is in use is not one action:</p>
+        <div class="stack" style="margin-top:.5rem">
+          <div class="kv"><dt>@skeptic</dt><dd class="small">used in <strong>2 rooms</strong> · 148 mentions</dd></div>
+          <div class="kv"><dt>history</dt><dd class="small">kept (transcript attribution must not break)</dd></div>
+          <div class="kv"><dt>default</dt><dd class="small"><strong>archive</strong>, not delete</dd></div>
+        </div>
+        <p class="small muted" style="margin-top:.7rem">Archive-by-default because a hard delete breaks every past transcript that references the bot — and a transcript whose attribution points at nothing is worse than a long list.</p>
+      </div>
+
+      <div class="card">
+        <h2>Test before you rely on it</h2>
+        <p class="small">A bot's credentials, model name and system prompt can each be wrong while the config looks perfect. "Test now" asks one question and reports which of the three failed.</p>
+        <div class="card inset" style="margin-top:.6rem">
+          <div class="kv"><dt>provider reachable</dt><dd class="small"><span class="status-dot status-ok"></span>yes · 210 ms</dd></div>
+          <div class="kv"><dt>model accepted</dt><dd class="small"><span class="status-dot status-ok"></span>yes</dd></div>
+          <div class="kv"><dt>reply received</dt><dd class="small"><span class="status-dot status-ok"></span>yes · 1.8 s · £0.004</dd></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Panel or debate</h2>
+        <p class="small"><strong>Panel</strong> — parallel, each bot answers independently. Independent opinions, cheaper, faster.</p>
+        <p class="small" style="margin-top:.4rem"><strong>Debate</strong> — sequential, each bot sees the previous answer. Actual argument, and N× the calls.</p>
+        <p class="small muted" style="margin-top:.5rem">Different products. Worth choosing per session rather than defaulting into one.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
